@@ -1,0 +1,1 @@
+This is EventManager application
