@@ -15,4 +15,13 @@ public class UserMapper {
         user.setPassword(resultSet.getString("password"));
         return user;
     }
+
+    public static User toSql(String id, String name, String surname, char[] inputArray) {
+        User user = new User();
+        user.setId(id);
+        user.setName(name);
+        user.setSurname(surname);
+        user.setPassword(String.valueOf(inputArray));
+        return user;
+    }
 }
