@@ -25,7 +25,7 @@ public class EventMapper {
         event.setTitle(resultSet.getString("title"));
         event.setDescription(resultSet.getString("description"));
         String date = resultSet.getString("date_time");
-        LocalDateTime dateTime = DateTimeParser.fromSql(date);
+        LocalDateTime dateTime = DateTimeParser.toJava(date);
         event.setDateTime(dateTime);
         event.setSpaceLimitations(resultSet.getInt("space_limitations"));
         event.setPlace(resultSet.getString("place"));

@@ -10,7 +10,7 @@ public class DateTimeParser {
     private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
     private static final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
-    public static LocalDateTime fromSql(String date) {
+    public static LocalDateTime toJava(String date) {
         LocalDateTime dateTime;
         try {
             dateTime = LocalDateTime.parse(date, dateTimeFormatter);
