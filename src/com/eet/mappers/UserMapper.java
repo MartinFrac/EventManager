@@ -7,7 +7,7 @@ import java.sql.SQLException;
 
 public class UserMapper {
 
-    public static User fromSql(ResultSet resultSet) throws SQLException {
+    public static User toJava(ResultSet resultSet) throws SQLException {
         User user = new User();
         user.setId(resultSet.getString("id"));
         user.setName(resultSet.getString("name"));
