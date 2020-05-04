@@ -17,10 +17,10 @@ public class EventOrganiserUI extends JPanel {
     private JButton viewBookings;
     private JButton createEvent;
     private JButton viewEvents;
-    private JButton goBack;
+    private JButton logout;
 
-    public JButton getgoBack() {
-        return goBack;
+    public JButton getlogout() {
+        return logout;
     }
     //Constructor
     public EventOrganiserUI(){
@@ -96,15 +96,15 @@ public class EventOrganiserUI extends JPanel {
         viewEvents.setText("View Events");
         viewEvents.setVisible(true);
 
-        goBack = new JButton();
-        goBack.setBounds(160,300,90,35);
-        goBack.setBackground(new Color(214,217,223));
-        goBack.setForeground(new Color(0,0,0));
-        goBack.setEnabled(true);
-        goBack.setFont(new Font("sansserif",0,12));
-        goBack.setText("Go back");
-        goBack.setVisible(true);
-        goBack.addActionListener(new ActionListener() {
+        logout = new JButton();
+        logout.setBounds(160,300,90,35);
+        logout.setBackground(new Color(214,217,223));
+        logout.setForeground(new Color(0,0,0));
+        logout.setEnabled(true);
+        logout.setFont(new Font("sansserif",0,12));
+        logout.setText("Logout");
+        logout.setVisible(true);
+        logout.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 SmallFrame.getjFrame().changePanel(new LoginUI());
@@ -116,14 +116,14 @@ public class EventOrganiserUI extends JPanel {
         contentPane.add(viewBookings);
         contentPane.add(createEvent);
         contentPane.add(viewEvents);
-        contentPane.add(goBack);
+        contentPane.add(logout);
 
         //adding panel to JFrame and seting of window position and close operation
         this.add(viewEvents);
         this.add(searchEvents);
         this.add(viewBookings);
         this.add(createEvent);
-        this.add(goBack);
+        this.add(logout);
     }
 
 
