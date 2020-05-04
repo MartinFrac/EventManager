@@ -46,8 +46,9 @@ public class LoginUI extends JPanel {
 				char[] arrayPassword = password.getPassword();
 				String id = studentId.getText();
 				if (userController.authenticate(id, arrayPassword)) {
-					ViewBookingsUI viewBookingsUI = new ViewBookingsUI();
-					new BigFrame(viewBookingsUI, viewBookingsUI.getGoBack());
+					//EventOrganiserUI eventOrganiserUI = new EventOrganiserUI();
+					//new BigFrame(eventOrganiserUI, eventOrganiserUI.getgoBack());//
+					SmallFrame.getjFrame().changePanel(new EventOrganiserUI());
 				} else {
 					System.out.println("Wrong credentials");
 				}
