@@ -14,21 +14,36 @@ public class EventController {
     }
 
     public Object[][] getBookings (String id) {
-        List<Event> events = eventDao.findEventsByUserId(id);
+        List<Event> events = eventDao.findBookingsByUserId(id);
         if(events.isEmpty()) {
             return null;
         } else {
-            Object[][] objects = new Object[events.size()][7];
-            for (int i = 0; i < events.size(); i++) {
-                objects[i][0] = events.get(i).getTitle();
-                objects[i][1] = events.get(i).getType().toString().toLowerCase();
-                objects[i][2] = events.get(i).getDescription();
-                objects[i][3] = events.get(i).getDateTime();
-                objects[i][4] = events.get(i).getSpaceLimitations();
-                objects[i][5] = events.get(i).getPlace();
-                objects[i][6] = "Cancel";
-            }
+            Object[][] objects = castToArray(events);
             return objects;
         }
+    }
+
+    public Object[][] getBookings (String id, String name) {
+        List<Event> events = eventDao.findBookingsByUserIdAndEventName(id, name);
+        if(events.isEmpty()) {
+            return null;
+        } else {
+            Object[][] objects = castToArray(events);
+            return objects;
+        }
+    }
+
+    private Object[][] castToArray(List<Event> events) {
+        Object[][] objects = new Object[events.size()][7];
+        for (int i = 0; i < events.size(); i++) {
+            objects[i][0] = events.get(i).getTitle();
+            objects[i][1] = events.get(i).getType().toString().toLowerCase();
+            objects[i][2] = events.get(i).getDescription();
+            objects[i][3] = events.get(i).getDateTime();
+            objects[i][4] = events.get(i).getSpaceLimitations();
+            objects[i][5] = events.get(i).getPlace();
+            objects[i][6] = "Cancel";
+        }
+        return objects;
     }
 }
