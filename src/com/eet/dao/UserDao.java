@@ -18,7 +18,7 @@ public class UserDao {
             pstmt.setString(1, id);
             ResultSet resultSet = pstmt.executeQuery();
             if (resultSet.next()) {
-                return UserMapper.fromSql(resultSet);
+                return UserMapper.toJava(resultSet);
             }
         } catch (SQLException e) {
             e.printStackTrace();
