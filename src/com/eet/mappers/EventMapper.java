@@ -16,7 +16,6 @@ public class EventMapper {
         repetition.setTime_of_the_day(resultSet.getString("time_of_the_day"));
         repetition.setDay_of_the_week(resultSet.getString("day_of_the_week"));
         repetition.setDay_of_the_month(resultSet.getString("day_of_the_month"));
-        repetition.setDay_of_the_year(resultSet.getString("day_of_the_year"));
         event = new Event();
         event.setId(resultSet.getInt("id"));
         event.setRepetition(repetition);

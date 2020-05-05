@@ -5,7 +5,6 @@ public class Repetition {
     private String time_of_the_day;
     private String day_of_the_week;
     private String day_of_the_month;
-    private String day_of_the_year;
 
     public Repetition() {
     }
@@ -32,13 +31,5 @@ public class Repetition {
 
     public void setDay_of_the_month(String day_of_the_month) {
         this.day_of_the_month = day_of_the_month;
-    }
-
-    public String getDay_of_the_year() {
-        return day_of_the_year;
-    }
-
-    public void setDay_of_the_year(String day_of_the_year) {
-        this.day_of_the_year = day_of_the_year;
     }
 }
