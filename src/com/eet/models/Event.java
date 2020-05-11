@@ -9,14 +9,16 @@ public class Event {
     private Type type;
     private String title;
     private String description;
-    private LocalDateTime dateTime;
+    private LocalDateTime startDate;
+    private LocalDateTime endDate;
+    private int availableSpaces;
     private int spaceLimitations;
     private String place;
 
     public Event() {
     }
 
-    public long getId() {
+    public int getId() {
         return id;
     }
 
@@ -56,12 +58,28 @@ public class Event {
         this.description = description;
     }
 
-    public LocalDateTime getDateTime() {
-        return dateTime;
+    public LocalDateTime getStartDate() {
+        return startDate;
     }
 
-    public void setDateTime(LocalDateTime dateTime) {
-        this.dateTime = dateTime;
+    public void setStartDate(LocalDateTime startDate) {
+        this.startDate = startDate;
+    }
+
+    public LocalDateTime getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(LocalDateTime endDate) {
+        this.endDate = endDate;
+    }
+
+    public int getAvailableSpaces() {
+        return availableSpaces;
+    }
+
+    public void setAvailableSpaces(int availableSpaces) {
+        this.availableSpaces = availableSpaces;
     }
 
     public int getSpaceLimitations() {
@@ -88,7 +106,9 @@ public class Event {
         sb.append(", type=").append(type);
         sb.append(", title='").append(title).append('\'');
         sb.append(", description='").append(description).append('\'');
-        sb.append(", dateTime=").append(dateTime);
+        sb.append(", startDate=").append(startDate);
+        sb.append(", endDate=").append(endDate);
+        sb.append(", availableSpaces=").append(availableSpaces);
         sb.append(", spaceLimitations=").append(spaceLimitations);
         sb.append(", place='").append(place).append('\'');
         sb.append('}');
