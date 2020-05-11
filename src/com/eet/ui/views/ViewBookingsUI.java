@@ -182,8 +182,9 @@ public class ViewBookingsUI extends JPanel {
 		String[] columnNames = {"Title",
 				"Type",
 				"Description",
-				"Date and time",
-				"Available spaces",
+				"Start Date",
+				"Duration",
+				"Spaces",
 				"Place",
 				"Click to cancel"
 		};
@@ -196,8 +197,14 @@ public class ViewBookingsUI extends JPanel {
 		model.setColumnIdentifiers(columnNames);
 		updateData(data);
 		table.setModel(model);
-		table.getColumnModel().getColumn(6).setCellRenderer(new ButtonRenderer());
-		table.getColumnModel().getColumn(6).setCellEditor(new ButtonEditor());
+		table.getColumnModel().getColumn(7).setCellRenderer(new ButtonRenderer());
+		table.getColumnModel().getColumn(7).setCellEditor(new ButtonEditor());
+		table.getColumnModel().getColumn(1).setMaxWidth(70);
+		table.getColumnModel().getColumn(3).setMinWidth(120);
+		table.getColumnModel().getColumn(3).setMaxWidth(120);
+		table.getColumnModel().getColumn(4).setMaxWidth(60);
+		table.getColumnModel().getColumn(5).setMaxWidth(70);
+		table.getColumnModel().getColumn(7).setMaxWidth(100);
 
 		JScrollPane scrollPane = new JScrollPane(table);
 		scrollPane.setBounds(0, 100, 900, 300);

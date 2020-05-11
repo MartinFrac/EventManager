@@ -3,6 +3,7 @@ package com.eet.controllers;
 import com.eet.dao.EventDao;
 import com.eet.models.Event;
 
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 public class EventController {
@@ -18,8 +19,7 @@ public class EventController {
         if(events.isEmpty()) {
             return null;
         } else {
-            Object[][] objects = castToArray(events);
-            return objects;
+            return castToArray(events);
         }
     }
 
@@ -28,22 +28,39 @@ public class EventController {
         if(events.isEmpty()) {
             return null;
         } else {
-            Object[][] objects = castToArray(events);
-            return objects;
+            return castToArray(events);
         }
     }
 
     private Object[][] castToArray(List<Event> events) {
-        Object[][] objects = new Object[events.size()][7];
+        Object[][] objects = new Object[events.size()][8];
         for (int i = 0; i < events.size(); i++) {
-            objects[i][0] = events.get(i).getTitle();
-            objects[i][1] = events.get(i).getType().toString().toLowerCase();
-            objects[i][2] = events.get(i).getDescription();
-            objects[i][3] = events.get(i).getDateTime();
-            objects[i][4] = events.get(i).getSpaceLimitations();
-            objects[i][5] = events.get(i).getPlace();
-            objects[i][6] = "Cancel";
+            Event event = events.get(i);
+            objects[i] = format(event);
         }
         return objects;
+    }
+
+    private Object[] format(Event event) {
+        Object[] object = new Object[8];
+        String spaces = event.getAvailableSpaces() + "/" + event.getSpaceLimitations();
+        String type = event.getType().toString().toLowerCase();
+        type = type.substring(0,1).toUpperCase() + type.substring(1);
+        long minutes = ChronoUnit.MINUTES.between(event.getStartDate(), event.getEndDate());
+        long hours = minutes / 60;
+        minutes = minutes % 60;
+        String duration = hours + "h " + minutes + "m";
+        String stringDate = event.getStartDate().toString();
+        stringDate = stringDate.replace('T', ' ');
+
+        object[0] = event.getTitle();
+        object[1] = type;
+        object[2] = event.getDescription();
+        object[3] = stringDate;
+        object[4] = duration;
+        object[5] = spaces;
+        object[6] = event.getPlace();
+        object[7] = "Cancel";
+        return object;
     }
 }
