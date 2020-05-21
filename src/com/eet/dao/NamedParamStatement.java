@@ -33,7 +33,6 @@ public class NamedParamStatement {
             sql = sql.substring(0, pos) + "?" + sql.substring(end);
             counter++;
         }
-        System.out.println(sql);
         prepStmt = conn.prepareStatement(sql);
     }
 
@@ -47,6 +46,10 @@ public class NamedParamStatement {
 
     public ResultSet executeQuery() throws SQLException {
         return prepStmt.executeQuery();
+    }
+
+    public void executeUpdate() throws SQLException {
+        prepStmt.executeUpdate();
     }
 
     public void close() throws SQLException {
