@@ -17,6 +17,7 @@ public class SmallFrame extends JFrame {
         this.pack();
         component.requestFocusInWindow();
         this.setVisible(true);
+        this.setResizable(false);
         jFrame = this;
     }
 

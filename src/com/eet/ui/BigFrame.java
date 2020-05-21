@@ -5,7 +5,7 @@ import java.awt.*;
 
 public class BigFrame extends JFrame {
 
-    private static JFrame jFrame;
+    private static BigFrame jFrame;
 
     public BigFrame(JPanel jPanel, Component component) {
 
@@ -17,10 +17,11 @@ public class BigFrame extends JFrame {
         this.pack();
         component.requestFocusInWindow();
         this.setVisible(true);
+        this.setResizable(false);
         jFrame = this;
     }
 
-    public static JFrame getjFrame() {
+    public static BigFrame getjFrame() {
         return jFrame;
     }
 
