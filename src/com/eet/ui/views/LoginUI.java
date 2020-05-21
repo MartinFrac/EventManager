@@ -12,7 +12,7 @@ import javax.swing.*;
 
 public class LoginUI extends JPanel {
 
-	private JButton login;
+	private JButton loginButton;
 	private JLabel noAccount;
 	private JPasswordField password;
 	private JButton register;
@@ -20,8 +20,8 @@ public class LoginUI extends JPanel {
 	private final char[] passwordArray = new char[]{'P','a','s','s','w','o','r','d'};
 	private UserController userController;
 
-	public JButton getLogin() {
-		return login;
+	public JButton getLoginButton() {
+		return loginButton;
 	}
 
 	//Constructor
@@ -32,15 +32,15 @@ public class LoginUI extends JPanel {
 		this.setPreferredSize(new Dimension(400,500));
 		this.setBackground(new Color(139,217,169));
 
-		login = new JButton();
-		login.setBounds(150,300,100,35);
-		login.setBackground(new Color(214,72,105));
-		login.setForeground(new Color(51,255,255));
-		login.setEnabled(true);
-		login.setFont(new Font("SansSerif",0,20));
-		login.setText("Login");
-		login.setVisible(true);
-		login.addActionListener(new ActionListener() {
+		loginButton = new JButton();
+		loginButton.setBounds(150,300,100,35);
+		loginButton.setBackground(new Color(214,72,105));
+		loginButton.setForeground(new Color(51,255,255));
+		loginButton.setEnabled(true);
+		loginButton.setFont(new Font("SansSerif",0,20));
+		loginButton.setText("Login");
+		loginButton.setVisible(true);
+		loginButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				char[] arrayPassword = password.getPassword();
@@ -127,7 +127,7 @@ public class LoginUI extends JPanel {
 		});
 
 		//adding components to contentPane panel
-		this.add(login);
+		this.add(loginButton);
 		this.add(noAccount);
 		this.add(password);
 		this.add(register);

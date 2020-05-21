@@ -9,6 +9,6 @@ public class Start {
     public static void main(String[] args) {
         SqliteConnection.setPath(args[0]);
         LoginUI loginUI = new LoginUI();
-        new SmallFrame(loginUI, loginUI.getLogin());
+        new SmallFrame(loginUI, loginUI.getLoginButton());
     }
 }
