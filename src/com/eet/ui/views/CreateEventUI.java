@@ -1,4 +1,6 @@
 package com.eet.ui.views;
 
-public class CreateEventUI {
+import javax.swing.*;
+
+public class CreateEventUI extends JPanel {
 }
