@@ -67,10 +67,4 @@ public class NamedParamStatement {
             prepStmt.setString(i, value);
         }
     }
-
-    public void setDate(String name, Timestamp value) throws SQLException {
-        for (Integer i: getIndexes(name)) {
-            prepStmt.setTimestamp(i, value);
-        }
-    }
 }
