@@ -1,18 +1,18 @@
 package com.eet.models;
 
-import java.time.LocalDateTime;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Filters {
 
     private String title;
-    private Type type;
+    private int type;
     private String place;
-    private LocalDateTime startDate;
-    private LocalDateTime endDate;
-    private List<String> keywords = new ArrayList<>();
-    private int spaceLimit;
+    private Timestamp startDate;
+    private Timestamp endDate;
+    private String keywords;
+    private int availableSpaces;
 
     public String getTitle() {
         return title;
@@ -22,51 +22,51 @@ public class Filters {
         this.title = title;
     }
 
-    public Type getType() {
+    public int getType() {
         return type;
     }
 
-    public void setType(Type type) {
+    public void setType(int type) {
         this.type = type;
     }
 
-    public String getLocation() {
+    public String getPlace() {
         return place;
     }
 
-    public void setLocation(String place) {
+    public void setPlace(String place) {
         this.place = place;
     }
 
-    public LocalDateTime getStartDate() {
+    public Timestamp getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(LocalDateTime startDate) {
+    public void setStartDate(Timestamp startDate) {
         this.startDate = startDate;
     }
 
-    public LocalDateTime getEndDate() {
+    public Timestamp getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(LocalDateTime endDate) {
+    public void setEndDate(Timestamp endDate) {
         this.endDate = endDate;
     }
 
-    public List<String> getKeywords() {
+    public String getKeywords() {
         return keywords;
     }
 
-    public void setKeyword(String keyword) {
-        this.keywords.add(keyword);
+    public void setKeywords(String keywords) {
+        this.keywords = keywords;
     }
 
-    public int getSpaceLimit() {
-        return spaceLimit;
+    public int getAvailableSpaces() {
+        return availableSpaces;
     }
 
-    public void setSpaceLimit(int spaceLimit) {
-        this.spaceLimit = spaceLimit;
+    public void setAvailableSpaces(int availableSpaces) {
+        this.availableSpaces = availableSpaces;
     }
 }
