@@ -11,14 +11,15 @@ import java.time.LocalDateTime;
 public class EventMapper {
 
     public static Event toJava(ResultSet resultSet) throws SQLException {
-        Event event;
-        Repetition repetition = new Repetition();
-        repetition.setTime_of_the_day(resultSet.getString("time_of_the_day"));
-        repetition.setDay_of_the_week(resultSet.getString("day_of_the_week"));
-        repetition.setDay_of_the_month(resultSet.getString("day_of_the_month"));
-        event = new Event();
+        Event event = new Event();
+        if (resultSet.getInt("repetition_id") != 0) {
+            Repetition repetition = new Repetition();
+            repetition.setTime_of_the_day(resultSet.getString("time_of_the_day"));
+            repetition.setDay_of_the_week(resultSet.getString("day_of_the_week"));
+            repetition.setDay_of_the_month(resultSet.getString("day_of_the_month"));
+            event.setRepetition(repetition);
+        }
         event.setId(resultSet.getInt("id"));
-        event.setRepetition(repetition);
         Type type = resultSet.getInt("type_id") == 1 ? Type.ONLINE : Type.PHYSICAL;
         event.setType(type);
         event.setTitle(resultSet.getString("title"));
