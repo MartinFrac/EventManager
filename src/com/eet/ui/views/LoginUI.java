@@ -50,7 +50,10 @@ public class LoginUI extends JPanel {
 					new BigFrame(viewBookingsUI, viewBookingsUI.getGoBackButton());
 					SmallFrame.getjFrame().dispose();
 				} else {
-					System.out.println("Wrong credentials");
+					JOptionPane.showMessageDialog(new JFrame(),
+							"Wrong credentials",
+							"Inane warning",
+							JOptionPane.WARNING_MESSAGE);
 				}
 			}
 		});
@@ -105,6 +108,13 @@ public class LoginUI extends JPanel {
 		register.setFont(new Font("SansSerif",0,10));
 		register.setText("Register");
 		register.setVisible(true);
+		register.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				RegisterUI registerUI = new RegisterUI();
+				SmallFrame.getjFrame().changePanel(registerUI);
+			}
+		});
 
 		studentId = new JTextField();
 		studentId.setBounds(100,100,200,35);
