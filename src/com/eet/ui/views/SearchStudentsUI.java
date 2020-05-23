@@ -1,4 +1,6 @@
 package com.eet.ui.views;
 
-public class ViewStudentsUI {
+import javax.swing.*;
+
+public class SearchStudentsUI extends JPanel {
 }
