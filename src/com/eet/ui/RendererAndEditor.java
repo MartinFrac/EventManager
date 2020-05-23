@@ -19,9 +19,9 @@ public class RendererAndEditor implements TableCellRenderer, TableCellEditor {
     private int row;
     private EventController eventController;
 
-    public RendererAndEditor(JTable table) {
+    public RendererAndEditor(JTable table, String name) {
         eventController = new EventController();
-        button = new JButton("Cancel");
+        button = new JButton(name);
         button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

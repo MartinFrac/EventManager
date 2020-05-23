@@ -282,8 +282,8 @@ public class ViewBookingsUI extends JPanel {
 			table.getColumnModel().getColumn(i).setMinWidth(widths[i]);
 			table.getColumnModel().getColumn(i).setMaxWidth(widths[i]);
 		}
-		table.getColumnModel().getColumn(7).setCellRenderer(new RendererAndEditor(table));
-		table.getColumnModel().getColumn(7).setCellEditor(new RendererAndEditor(table));
+		table.getColumnModel().getColumn(7).setCellRenderer(new RendererAndEditor(table, "Cancel"));
+		table.getColumnModel().getColumn(7).setCellEditor(new RendererAndEditor(table, "Cancel"));
 		table.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
