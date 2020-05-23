@@ -19,56 +19,32 @@ public class EventController {
 
     public Object[][] getRepeatableBookings (String id) {
         List<Event> events = eventDao.findRepeatableBookingsByUserId(id);
-        if(events.isEmpty()) {
-            return null;
-        } else {
-            return castToArray(events);
-        }
+        return castToArray(events);
     }
 
     public Object[][] getNonRepeatableBookings (String id) {
         List<Event> events = eventDao.findNonRepeatableBookingsByUserId(id);
-        if(events.isEmpty()) {
-            return null;
-        } else {
-            return castToArray(events);
-        }
+        return castToArray(events);
     }
 
     public Object[][] getRepeatableBookings (String id, String name) {
         List<Event> events = eventDao.findRepeatableBookingsByUserIdAndEventName(id, name);
-        if(events.isEmpty()) {
-            return null;
-        } else {
-            return castToArray(events);
-        }
+        return castToArray(events);
     }
 
     public Object[][] getNonRepeatableBookings (String id, String name) {
         List<Event> events = eventDao.findNonRepeatableBookingsByUserIdAndEventName(id, name);
-        if(events.isEmpty()) {
-            return null;
-        } else {
-            return castToArray(events);
-        }
+        return castToArray(events);
     }
 
     public Object[][] getRepeatableBookingswithFilters(String id, Filters filters) {
         List<Event> events = eventDao.findRepeatableBookingsWithFilters(id, filters);
-        if(events.isEmpty()) {
-            return null;
-        } else {
-            return castToArray(events);
-        }
+        return castToArray(events);
     }
 
     public Object[][] getNonRepeatableBookingsWithFilters(String id, Filters filters) {
         List<Event> events = eventDao.findNonRepeatableBookingsWithFilters(id, filters);
-        if(events.isEmpty()) {
-            return null;
-        } else {
-            return castToArray(events);
-        }
+        return castToArray(events);
     }
 
     public void deleteBooking (int eventId, String userId) {
@@ -76,6 +52,9 @@ public class EventController {
     }
 
     private Object[][] castToArray(List<Event> events) {
+        if (events.isEmpty()) {
+            return null;
+        }
         Object[][] objects = new Object[events.size()][8];
         for (int i = 0; i < events.size(); i++) {
             Event event = events.get(i);
