@@ -92,7 +92,7 @@ public class ViewBookingsUI extends JPanel {
 						if (repeatableButton.getText().equals("Repeatable Events")) {
 							data = eventController.getNonRepeatableBookingsWithFilters(ActiveUser.getUser().getId(), filters);
 						} else {
-							data = eventController.getRepeatableBookingswithFilters(ActiveUser.getUser().getId(), filters);
+							data = eventController.getRepeatableBookingsWithFilters(ActiveUser.getUser().getId(), filters);
 						}
 						Utility.updateData(data, model);
 					}

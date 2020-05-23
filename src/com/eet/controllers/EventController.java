@@ -37,7 +37,7 @@ public class EventController {
         return castToArray(events);
     }
 
-    public Object[][] getRepeatableBookingswithFilters(String id, Filters filters) {
+    public Object[][] getRepeatableBookingsWithFilters(String id, Filters filters) {
         List<Event> events = eventDao.findRepeatableBookingsWithFilters(id, filters);
         return castToArray(events);
     }
