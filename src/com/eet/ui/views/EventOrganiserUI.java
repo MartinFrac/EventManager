@@ -1,4 +1,99 @@
 package com.eet.ui.views;
 
-public class EventOrganiserUI {
+import com.eet.database.SqliteConnection;
+import com.eet.memory.ActiveUser;
+import com.eet.ui.BigFrame;
+import com.eet.ui.SmallFrame;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+public class EventOrganiserUI extends JPanel {
+
+    private JButton searchEventButton;
+    private JButton viewBookingsButton;
+    private JButton createEventButton;
+    private JButton viewOwnEventsButton;
+    private JButton logoutButton;
+
+    //Constructor
+    public EventOrganiserUI(){
+
+
+        //pane with null layout
+        this.setLayout(null);
+        this.setPreferredSize(new Dimension(400,500));
+        this.setBackground(new Color(139,217,169));
+
+
+        searchEventButton = new JButton();
+        searchEventButton.setBounds(100,40,200,35);
+        searchEventButton.setBackground(new Color(214,72,105));
+        searchEventButton.setForeground(new Color(51,255,255));
+        searchEventButton.setEnabled(true);
+        searchEventButton.setFont(new Font("SansSerif",0,20));
+        searchEventButton.setText("Search Event");
+        searchEventButton.setVisible(true);
+
+        viewBookingsButton = new JButton();
+        viewBookingsButton.setBounds(100,110,200,35);
+        viewBookingsButton.setBackground(new Color(214,72,105));
+        viewBookingsButton.setForeground(new Color(51,255,255));
+        viewBookingsButton.setEnabled(true);
+        viewBookingsButton.setFont(new Font("SansSerif",0,20));
+        viewBookingsButton.setText("View Bookings");
+        viewBookingsButton.setVisible(true);
+        viewBookingsButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ViewBookingsUI viewBookingsUI = new ViewBookingsUI();
+                SmallFrame.getjFrame().dispose();
+                new BigFrame(viewBookingsUI, viewBookingsUI.getGoBackButton());
+            }
+        });
+
+        createEventButton = new JButton();
+        createEventButton.setBounds(100,210,200,35);
+        createEventButton.setBackground(new Color(214,72,105));
+        createEventButton.setForeground(new Color(51,255,255));
+        createEventButton.setEnabled(true);
+        createEventButton.setFont(new Font("SansSerif",0,20));
+        createEventButton.setText("Create Event");
+        createEventButton.setVisible(true);
+
+        viewOwnEventsButton = new JButton();
+        viewOwnEventsButton.setBounds(100,280,200,35);
+        viewOwnEventsButton.setBackground(new Color(214,72,105));
+        viewOwnEventsButton.setForeground(new Color(51,255,255));
+        viewOwnEventsButton.setEnabled(true);
+        viewOwnEventsButton.setFont(new Font("SansSerif",0,20));
+        viewOwnEventsButton.setText("View Own Events");
+        viewOwnEventsButton.setVisible(true);
+
+        logoutButton = new JButton();
+        logoutButton.setBounds(125,400,150,35);
+        logoutButton.setBackground(new Color(214,72,105));
+        logoutButton.setForeground(new Color(51,255,255));
+        logoutButton.setEnabled(true);
+        logoutButton.setFont(new Font("SansSerif",0,20));
+        logoutButton.setText("Logout");
+        logoutButton.setVisible(true);
+        logoutButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                LoginUI loginUI = new LoginUI();
+                SmallFrame.getjFrame().changePanel(loginUI);
+                ActiveUser.setUser(null);
+            }
+        });
+
+        //adding components to contentPane panel
+        this.add(searchEventButton);
+        this.add(viewBookingsButton);
+        this.add(createEventButton);
+        this.add(viewOwnEventsButton);
+        this.add(logoutButton);
+    }
 }
