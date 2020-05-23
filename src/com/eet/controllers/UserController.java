@@ -24,4 +24,16 @@ public class UserController {
         ActiveUser.setUser(user);
         return true;
     }
+
+    public boolean checkIfUserExists(String id) {
+        if (userDao.findById(id)==null) {
+            return false;
+        }
+        return true;
+    }
+
+    public void create(User user) {
+        user.setRole(3);
+        userDao.create(user);
+    }
 }
