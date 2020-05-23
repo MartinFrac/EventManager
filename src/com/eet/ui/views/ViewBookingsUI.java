@@ -16,12 +16,9 @@ import java.util.*;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
-public class ViewBookingsUI extends JPanel {
+import static com.eet.ui.Utility.*;
 
-	private static final String TITLE = "Name of the event";
-	private static final String PLACE = "Place";
-	private static final String AVAILABLE_SPACES = "Available spaces";
-	private static final String KEYWORDS = "Keywords";
+public class ViewBookingsUI extends JPanel {
 
 	private JButton goBackButton;
 	private JLabel searchEventLabel;
@@ -53,9 +50,9 @@ public class ViewBookingsUI extends JPanel {
 		this.setPreferredSize(new Dimension(900,600));
 		this.setBackground(new Color(192,192,192));
 
-		datePickerStart = datePickerGenerator(15, 510, 150, 25);
+		datePickerStart = Utility.datePickerGenerator(15, 510, 150, 25);
 
-		datePickerEnd = datePickerGenerator(185, 510, 150, 25);
+		datePickerEnd = Utility.datePickerGenerator(185, 510, 150, 25);
 
 		String[] options = {"None", "Online", "Physical"};
 		eventTypesComboBox = new JComboBox<>(options);
@@ -87,7 +84,7 @@ public class ViewBookingsUI extends JPanel {
 					map.put("keywords", keywords);
 					map.put("type", type);
 
-					Filters filters = validateFilters(map, startDate, endDate);
+					Filters filters = Utility.validateFilters(map, startDate, endDate);
 					if (filters==null) {
 						System.out.println("wrong filters");
 					} else {
@@ -97,7 +94,7 @@ public class ViewBookingsUI extends JPanel {
 						} else {
 							data = eventController.getRepeatableBookingswithFilters(ActiveUser.getUser().getId(), filters);
 						}
-						updateData(data);
+						Utility.updateData(data, model);
 					}
 				} catch (ClassCastException exception) {
 					System.out.println(exception.getMessage());
@@ -151,7 +148,7 @@ public class ViewBookingsUI extends JPanel {
 				} else {
 					data = eventController.getRepeatableBookings(userId, name);
 				}
-				updateData(data);
+				Utility.updateData(data, model);
 			}
 		});
 
@@ -170,7 +167,7 @@ public class ViewBookingsUI extends JPanel {
 					Object[][] data = eventController.getRepeatableBookings(ActiveUser.getUser().getId());
 					table.getColumnModel().getColumn(3).setHeaderValue("Repetition");
 					table.getTableHeader().repaint();
-					updateData(data);
+					Utility.updateData(data, model);
 					repeatableButton.setText("One time Events");
 					int[] widths = {150, 60, 110, 200, 60, 70, 150, 100, 0};
 					for (int i = 0; i<widths.length; i++) {
@@ -182,7 +179,7 @@ public class ViewBookingsUI extends JPanel {
 					Object[][] data = eventController.getNonRepeatableBookings(ActiveUser.getUser().getId());
 					table.getColumnModel().getColumn(3).setHeaderValue("Start Date");
 					table.getTableHeader().repaint();
-					updateData(data);
+					Utility.updateData(data, model);
 					repeatableButton.setText("Repeatable Events");
 					int[] widths = {150, 60, 190, 120, 60, 70, 150, 100, 0};
 					for (int i = 0; i<widths.length; i++) {
@@ -193,7 +190,7 @@ public class ViewBookingsUI extends JPanel {
 			}
 		});
 
-		titleTextField = textFieldGenerator(50,40,180,35, TITLE);
+		titleTextField = Utility.textFieldGenerator(50,40,180,35, TITLE);
 		titleTextField.addFocusListener(new FocusListener() {
 			@Override
 			public void focusGained(FocusEvent e) {
@@ -210,7 +207,7 @@ public class ViewBookingsUI extends JPanel {
 			}
 		});
 
-		keywordsTextField = textFieldGenerator(355,460,150,35, KEYWORDS);
+		keywordsTextField = Utility.textFieldGenerator(355,460,150,35, KEYWORDS);
 		keywordsTextField.addFocusListener(new FocusListener() {
 			@Override
 			public void focusGained(FocusEvent e) {
@@ -227,7 +224,7 @@ public class ViewBookingsUI extends JPanel {
 			}
 		});
 
-		locationTextField = textFieldGenerator(15,460,150,35, PLACE);
+		locationTextField = Utility.textFieldGenerator(15,460,150,35, PLACE);
 		locationTextField.addFocusListener(new FocusListener() {
 			@Override
 			public void focusGained(FocusEvent e) {
@@ -244,7 +241,7 @@ public class ViewBookingsUI extends JPanel {
 			}
 		});
 
-		availableSpacesTextField = textFieldGenerator(185,460,150,35, AVAILABLE_SPACES);
+		availableSpacesTextField = Utility.textFieldGenerator(185,460,150,35, AVAILABLE_SPACES);
 		availableSpacesTextField.addFocusListener(new FocusListener() {
 			@Override
 			public void focusGained(FocusEvent e) {
@@ -278,7 +275,7 @@ public class ViewBookingsUI extends JPanel {
 		table.setRowHeight(40);
 		model = new DefaultTableModel();
 		model.setColumnIdentifiers(columnNames);
-		updateData(data);
+		Utility.updateData(data, model);
 		table.setModel(model);
 		int[] widths = {150, 60, 190, 120, 60, 70, 150, 100, 0};
 		for (int i = 0; i<widths.length; i++) {
@@ -320,134 +317,5 @@ public class ViewBookingsUI extends JPanel {
 		this.add(datePickerStart);
 		this.add(datePickerEnd);
 		this.add(eventTypesComboBox);
-	}
-
-	private Filters validateFilters(HashMap<String, String> map, Date startDate, Date endDate) {
-
-		Filters filters = new Filters();
-
-		String title = map.get("title");
-		String type = map.get("type");
-		String place = map.get("place");
-		String keywords = map.get("keywords");
-		String availableSpaces = map.get("availableSpaces");
-
-		int availableSpacesInteger = -1;
-		Timestamp startTimestamp = null;
-		Timestamp endTimestamp = null;
-		int intType = -1;
-
-		for (String key: map.keySet()) {
-			if (map.get(key).length()>=255) {
-				JOptionPane.showMessageDialog(new JFrame(),
-						"length of the value in: " + key + " exceeds 254 characters",
-						"Inane warning",
-						JOptionPane.WARNING_MESSAGE);
-				return null;
-			}
-		}
-		if (TITLE.equals(title)) {
-			title = "";
-		}
-		if (PLACE.equals(place)) {
-			place = "";
-		}
-		if (AVAILABLE_SPACES.equals(availableSpaces)) {
-			availableSpaces = "-1";
-		}
-		if (KEYWORDS.equals(keywords)) {
-			keywords = "";
-		} else {
-			String[] array = keywords.split(" ");
-			if (array.length>1) {
-				keywords = String.join("* OR ", array);
-			} else {
-				keywords = array[0] + "*";
-			}
-		}
-
-		startTimestamp = dateToTimestamp(startDate);
-		endTimestamp = dateToTimestamp(endDate);
-
-		if ((startTimestamp == null && endTimestamp != null)
-			|| (startTimestamp != null && endTimestamp ==null)) {
-			JOptionPane.showMessageDialog(new JFrame(),
-					"Both dates need to be filled up",
-					"Inane warning",
-					JOptionPane.WARNING_MESSAGE);
-			return null;
-		}
-		if (!"None".equals(type)) {
-			intType = type.equals("Online") ? 1 : 2;
-		}
-		try {
-			availableSpacesInteger = Integer.parseInt(availableSpaces);
-		} catch (NumberFormatException numberFormatException) {
-			JOptionPane.showMessageDialog(new JFrame(),
-					"Value in the Available spaces field is not an Integer",
-					"Inane warning",
-					JOptionPane.WARNING_MESSAGE);
-			return null;
-		}
-		if (availableSpacesInteger<-1) {
-			JOptionPane.showMessageDialog(new JFrame(),
-					"Value in the Available spaces field is negative",
-					"Inane warning",
-					JOptionPane.WARNING_MESSAGE);
-			return null;
-		}
-		filters.setTitle(title);
-		filters.setType(intType);
-		filters.setPlace(place);
-		filters.setKeywords(keywords);
-		filters.setAvailableSpaces(availableSpacesInteger);
-		filters.setStartDate(startTimestamp);
-		filters.setEndDate(endTimestamp);
-
-		return filters;
-	}
-
-	private Timestamp dateToTimestamp(Date date) {
-		Timestamp timestamp = null;
-		if (date!=null) {
-			Calendar calendarStart = Calendar.getInstance();
-			calendarStart.setTime(date);
-			calendarStart.set(Calendar.HOUR_OF_DAY, 0);
-			calendarStart.set(Calendar.MINUTE, 0);
-			calendarStart.set(Calendar.MILLISECOND, 0);
-			date = calendarStart.getTime();
-			timestamp = new Timestamp(date.getTime());
-		}
-		return timestamp;
-	}
-
-	private void updateData(Object[][] data) {
-		model.getDataVector().removeAllElements();
-		if(data!=null) {
-			for(int i = 0; i < data.length; i++) {
-				model.addRow(data[i]);
-			}
-		}
-		model.fireTableDataChanged();
-	}
-
-	private static JDatePickerImpl datePickerGenerator(int x, int y, int width, int height) {
-		UtilDateModel utilDateModel = new UtilDateModel();
-		JDatePanelImpl jDatePanel = new JDatePanelImpl(utilDateModel, new Properties());
-		JDatePickerImpl datePicker = new JDatePickerImpl(jDatePanel, new DateLabelFormatter());
-		datePicker.setBounds(x, y, width, height);
-		return datePicker;
-	}
-
-	private static JTextField textFieldGenerator(int x, int y, int width, int height, String text) {
-		JTextField textField = new JTextField();
-		textField.setBounds(x, y, width, height);
-		textField.setBackground(Color.white);
-		textField.setForeground(Color.black);
-		textField.setEnabled(true);
-		textField.setFont(new Font("sansserif",0,12));
-		textField.setText(text);
-		textField.setVisible(true);
-		return textField;
 	}
 }
