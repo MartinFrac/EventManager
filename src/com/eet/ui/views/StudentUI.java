@@ -12,7 +12,7 @@ import javax.swing.*;
 
 public class StudentUI extends JPanel {
 
-    private JButton searchEventButton;
+    private JButton searchEventsButton;
     private JButton viewBookingsButton;
     private JButton logoutButton;
 
@@ -26,14 +26,22 @@ public class StudentUI extends JPanel {
         this.setBackground(new Color(139,217,169));
 
 
-        searchEventButton = new JButton();
-        searchEventButton.setBounds(100,90,200,35);
-        searchEventButton.setBackground(new Color(214,72,105));
-        searchEventButton.setForeground(new Color(51,255,255));
-        searchEventButton.setEnabled(true);
-        searchEventButton.setFont(new Font("SansSerif",0,20));
-        searchEventButton.setText("Search Event");
-        searchEventButton.setVisible(true);
+        searchEventsButton = new JButton();
+        searchEventsButton.setBounds(100,90,200,35);
+        searchEventsButton.setBackground(new Color(214,72,105));
+        searchEventsButton.setForeground(new Color(51,255,255));
+        searchEventsButton.setEnabled(true);
+        searchEventsButton.setFont(new Font("SansSerif",0,20));
+        searchEventsButton.setText("Search Events");
+        searchEventsButton.setVisible(true);
+        searchEventsButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                SearchEventsUI searchEventsUI = new SearchEventsUI();
+                SmallFrame.getjFrame().dispose();
+                new BigFrame(searchEventsUI, searchEventsUI.getGoBackButton());
+            }
+        });
 
         viewBookingsButton = new JButton();
         viewBookingsButton.setBounds(100,170,200,35);
@@ -70,7 +78,7 @@ public class StudentUI extends JPanel {
         });
 
         //adding components to contentPane panel
-        this.add(searchEventButton);
+        this.add(searchEventsButton);
         this.add(viewBookingsButton);
         this.add(logoutButton);
     }

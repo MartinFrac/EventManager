@@ -1,6 +1,7 @@
 package com.eet.ui.views;
 
 import com.eet.memory.ActiveUser;
+import com.eet.ui.BigFrame;
 import com.eet.ui.SmallFrame;
 
 import javax.swing.*;
@@ -35,7 +36,9 @@ public class AdminUI extends JPanel {
         searchEventsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                SearchEventsUI searchEventsUI = new SearchEventsUI();
+                SmallFrame.getjFrame().dispose();
+                new BigFrame(searchEventsUI, searchEventsUI.getGoBackButton());
             }
         });
 
