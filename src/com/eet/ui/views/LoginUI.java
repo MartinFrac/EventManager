@@ -1,6 +1,7 @@
 package com.eet.ui.views;
 
 import com.eet.controllers.UserController;
+import com.eet.models.User;
 import com.eet.ui.BigFrame;
 import com.eet.ui.SmallFrame;
 
@@ -45,9 +46,18 @@ public class LoginUI extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				char[] arrayPassword = password.getPassword();
 				String id = studentId.getText();
-				if (userController.authenticate(id, arrayPassword)) {
-					StudentUI studentUI = new StudentUI();
-					SmallFrame.getjFrame().changePanel(studentUI);
+				User user = userController.authenticate(id, arrayPassword);
+				if (user!=null) {
+					JPanel jPanel = null;
+					switch (user.getRole()) {
+						case 1: jPanel = new AdminUI();
+						break;
+						case 2: jPanel = new EventOrganiserUI();
+						break;
+						case 3: jPanel = new StudentUI();
+						break;
+					}
+					SmallFrame.getjFrame().changePanel(jPanel);
 				} else {
 					JOptionPane.showMessageDialog(new JFrame(),
 							"Wrong credentials",

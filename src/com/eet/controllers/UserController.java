@@ -11,18 +11,18 @@ public class UserController {
         userDao = new UserDao();
     }
 
-    public boolean authenticate(String id, char[] arrayPassword) {
+    public User authenticate(String id, char[] arrayPassword) {
         String inputPassword = new String(arrayPassword);
         User user = userDao.findById(id);
         if (user == null) {
-            return false;
+            return null;
         }
         String correctPassword = user.getPassword();
         if (!inputPassword.equals(correctPassword)) {
-            return false;
+            return null;
         }
         ActiveUser.setUser(user);
-        return true;
+        return user;
     }
 
     public boolean checkIfUserExists(String id) {
