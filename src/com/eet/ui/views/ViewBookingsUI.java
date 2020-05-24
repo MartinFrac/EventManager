@@ -150,6 +150,9 @@ public class ViewBookingsUI extends JPanel {
 				Object[][] data;
 				String userId = ActiveUser.getUser().getId();
 				String name = titleTextField.getText();
+				if (TITLE.equals(name)) {
+					name = "";
+				}
 				if (repeatableButton.getText().equals("Repeatable Events")) {
 					data = eventController.getNonRepeatableBookings(userId, name);
 				} else {
