@@ -113,10 +113,17 @@ public class ViewBookingsUI extends JPanel {
 		goBackButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent actionEvent) {
-				ActiveUser.setUser(null);
-				LoginUI loginUI = new LoginUI();
-				new SmallFrame(loginUI, loginUI.getLoginButton());
+				JPanel jPanel = null;
+				switch (ActiveUser.getUser().getRole()) {
+					case 1: jPanel = new AdminUI();
+						break;
+					case 2: jPanel = new EventOrganiserUI();
+						break;
+					case 3: jPanel = new StudentUI();
+						break;
+				}
 				BigFrame.getjFrame().dispose();
+				new SmallFrame(jPanel);
 			}
 		});
 
