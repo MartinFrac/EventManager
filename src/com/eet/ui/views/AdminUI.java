@@ -18,12 +18,10 @@ public class AdminUI extends JPanel {
     //Constructor
     public AdminUI(){
 
-
         //pane with null layout
         this.setLayout(null);
         this.setPreferredSize(new Dimension(400,500));
         this.setBackground(new Color(139,217,169));
-
 
         searchEventsButton = new JButton();
         searchEventsButton.setBounds(100,90,200,35);
