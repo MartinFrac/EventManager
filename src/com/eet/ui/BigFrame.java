@@ -7,8 +7,19 @@ public class BigFrame extends JFrame {
 
     private static BigFrame jFrame;
 
-    public BigFrame(JPanel jPanel, Component component) {
+    public BigFrame(JPanel jPanel) {
+        this.setTitle("GUI_project");
+        this.setSize(900,600);
+        this.getContentPane().add(jPanel);
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setLocationRelativeTo(null);
+        this.pack();
+        this.setVisible(true);
+        this.setResizable(false);
+        jFrame = this;
+    }
 
+    public BigFrame(JPanel jPanel, Component component) {
         this.setTitle("GUI_project");
         this.setSize(900,600);
         this.getContentPane().add(jPanel);
