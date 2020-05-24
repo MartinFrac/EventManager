@@ -107,11 +107,13 @@ public class EventDao {
                 "INNER JOIN BOOKING AS b on b.event_id = e.id " +
                 "INNER JOIN TYPE AS t on e.type_id = t.id " +
                 "WHERE e.repetition_id IS NOT NULL " +
-                "AND b.user_id = ? AND e.title LIKE '%'|| ? ||'%'";
+                "AND b.user_id = ? " +
+                "AND (CASE WHEN ? = '' THEN TRUE ELSE e.title LIKE '%'|| ? ||'%' END)";
         try (Connection connection = SqliteConnection.getConnection();
              PreparedStatement pstmt = connection.prepareStatement(query)) {
             pstmt.setString(1, id);
             pstmt.setString(2, name);
+            pstmt.setString(3, name);
             ResultSet resultSet = pstmt.executeQuery();
 
             while (resultSet.next()) {
@@ -130,11 +132,13 @@ public class EventDao {
                 "FROM EVENT AS e INNER JOIN BOOKING AS b on b.event_id = e.id " +
                 "INNER JOIN TYPE AS t on e.type_id = t.id " +
                 "WHERE e.repetition_id IS NULL " +
-                "AND b.user_id = ? AND e.title LIKE '%'|| ? ||'%'";
+                "AND b.user_id = ? " +
+                "AND (CASE WHEN ? = '' THEN TRUE ELSE e.title LIKE '%'|| ? ||'%' END)";
         try (Connection connection = SqliteConnection.getConnection();
              PreparedStatement pstmt = connection.prepareStatement(query)) {
             pstmt.setString(1, id);
             pstmt.setString(2, name);
+            pstmt.setString(3, name);
             ResultSet resultSet = pstmt.executeQuery();
 
             while (resultSet.next()) {
@@ -155,11 +159,13 @@ public class EventDao {
                 "INNER JOIN BOOKING AS b on b.event_id = e.id " +
                 "INNER JOIN TYPE AS t on e.type_id = t.id " +
                 "WHERE e.repetition_id IS NOT NULL " +
-                "AND b.user_id != ? AND e.title LIKE '%'|| ? ||'%'";
+                "AND b.user_id != ? " +
+                "AND (CASE WHEN ? = '' THEN TRUE ELSE e.title LIKE '%'|| ? ||'%' END)";
         try (Connection connection = SqliteConnection.getConnection();
              PreparedStatement pstmt = connection.prepareStatement(query)) {
             pstmt.setString(1, id);
             pstmt.setString(2, name);
+            pstmt.setString(3, name);
             ResultSet resultSet = pstmt.executeQuery();
 
             while (resultSet.next()) {
@@ -178,11 +184,13 @@ public class EventDao {
                 "FROM EVENT AS e INNER JOIN BOOKING AS b on b.event_id = e.id " +
                 "INNER JOIN TYPE AS t on e.type_id = t.id " +
                 "WHERE e.repetition_id IS NULL " +
-                "AND b.user_id != ? AND e.title LIKE '%'|| ? ||'%'";
+                "AND b.user_id != ? " +
+                "AND (CASE WHEN ? = '' THEN TRUE ELSE e.title LIKE '%'|| ? ||'%' END)";
         try (Connection connection = SqliteConnection.getConnection();
              PreparedStatement pstmt = connection.prepareStatement(query)) {
             pstmt.setString(1, id);
             pstmt.setString(2, name);
+            pstmt.setString(3, name);
             ResultSet resultSet = pstmt.executeQuery();
 
             while (resultSet.next()) {
