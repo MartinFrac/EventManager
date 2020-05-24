@@ -29,7 +29,7 @@ public class AdminUI extends JPanel {
         searchEventsButton.setForeground(new Color(51,255,255));
         searchEventsButton.setEnabled(true);
         searchEventsButton.setFont(new Font("SansSerif",0,20));
-        searchEventsButton.setText("Search Event");
+        searchEventsButton.setText("Search Events");
         searchEventsButton.setVisible(true);
         searchEventsButton.addActionListener(new ActionListener() {
             @Override
