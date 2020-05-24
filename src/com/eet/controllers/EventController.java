@@ -47,6 +47,36 @@ public class EventController {
         return castToArray(events);
     }
 
+    public Object[][] getRepeatableEventsNotBookings (String id) {
+        List<Event> events = eventDao.findRepeatableEventsByUserIdNotBookings(id);
+        return castToArray(events);
+    }
+
+    public Object[][] getNonRepeatableEventsNotBookings (String id) {
+        List<Event> events = eventDao.findNonRepeatableEventsByUserIdNotBookings(id);
+        return castToArray(events);
+    }
+
+    public Object[][] getRepeatableEventsNotBookings (String id, String name) {
+        List<Event> events = eventDao.findRepeatableEventsByUserIdAndEventNameNotBookings(id, name);
+        return castToArray(events);
+    }
+
+    public Object[][] getNonRepeatableEventsNotBookings (String id, String name) {
+        List<Event> events = eventDao.findNonRepeatableBEventsByUserIdAndEventNameNotBookings(id, name);
+        return castToArray(events);
+    }
+
+    public Object[][] getRepeatableEventsWithFiltersNotBookings(String id, Filters filters) {
+        List<Event> events = eventDao.findRepeatableEventsWithFiltersNotBookings(id, filters);
+        return castToArray(events);
+    }
+
+    public Object[][] getNonRepeatableEventsWithFiltersNotBookings(String id, Filters filters) {
+        List<Event> events = eventDao.findNonRepeatableEventsWithFiltersNotBookings(id, filters);
+        return castToArray(events);
+    }
+
     public void deleteBooking (int eventId, String userId) {
         eventDao.deleteBookingByIdAndUserId(eventId, userId);
     }
