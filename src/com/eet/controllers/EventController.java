@@ -1,12 +1,14 @@
 package com.eet.controllers;
 
 import com.eet.dao.EventDao;
+import com.eet.mappers.EventMapper;
 import com.eet.models.Event;
 import com.eet.models.Filters;
 import com.eet.models.Repetition;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.HashMap;
 import java.util.List;
 
 public class EventController {
@@ -145,5 +147,14 @@ public class EventController {
             result += " day of a month";
         }
         return result;
+    }
+
+    public void create(HashMap<String, Object> map, String userId) {
+        Event event = EventMapper.fromUI(map);
+        eventDao.create(event, userId);
+    }
+
+    public boolean checkIfExistsByName(String name) {
+        return eventDao.checkIfExistsByName(name);
     }
 }
