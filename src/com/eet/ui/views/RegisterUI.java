@@ -258,17 +258,17 @@ public class RegisterUI extends JPanel {
         return true;
     }
 
-    private void placeholderDisappear(AWTEvent event, String placeholder) {
+    private void placeholderDisappear(AWTEvent event, String placeHolder) {
         JTextField textField = (JTextField) event.getSource();
-        if (textField.getText().equals(placeholder)) {
+        if (textField.getText().equals(placeHolder)) {
             textField.setText("");
         }
     }
 
-    private void placeholderAppear(AWTEvent event, String placehlder) {
+    private void placeholderAppear(AWTEvent event, String placeHolder) {
         JTextField textField = (JTextField) event.getSource();
         if (textField.getText().equals("")) {
-            textField.setText(placehlder);
+            textField.setText(placeHolder);
         }
     }
 }
