@@ -14,9 +14,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Vector;
 
-import static com.eet.ui.Utility.*;
-import static com.eet.ui.Utility.AVAILABLE_SPACES;
-
 public class SearchEventsUI extends JPanel {
 
     private JButton goBackButton;
@@ -149,7 +146,7 @@ public class SearchEventsUI extends JPanel {
                 Object[][] data;
                 String userId = ActiveUser.getUser().getId();
                 String name = titleTextField.getText();
-                if (TITLE.equals(name)) {
+                if (Filters.TITLE.equals(name)) {
                     name = "";
                 }
                 if (repeatableButton.getText().equals("Repeatable Events")) {
@@ -199,11 +196,11 @@ public class SearchEventsUI extends JPanel {
             }
         });
 
-        titleTextField = Utility.textFieldGenerator(50,40,180,35, TITLE);
+        titleTextField = Utility.textFieldGenerator(50,40,180,35, Filters.TITLE);
         titleTextField.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {
-                if (titleTextField.getText().equals(TITLE)) {
+                if (titleTextField.getText().equals(Filters.TITLE)) {
                     titleTextField.setText("");
                 }
             }
@@ -211,16 +208,16 @@ public class SearchEventsUI extends JPanel {
             @Override
             public void focusLost(FocusEvent e) {
                 if (titleTextField.getText().equals("")) {
-                    titleTextField.setText(TITLE);
+                    titleTextField.setText(Filters.TITLE);
                 }
             }
         });
 
-        keywordsTextField = Utility.textFieldGenerator(355,460,150,35, KEYWORDS);
+        keywordsTextField = Utility.textFieldGenerator(355,460,150,35, Filters.KEYWORDS);
         keywordsTextField.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {
-                if (keywordsTextField.getText().equals(KEYWORDS)) {
+                if (keywordsTextField.getText().equals(Filters.KEYWORDS)) {
                     keywordsTextField.setText("");
                 }
             }
@@ -228,16 +225,16 @@ public class SearchEventsUI extends JPanel {
             @Override
             public void focusLost(FocusEvent e) {
                 if (keywordsTextField.getText().equals("")) {
-                    keywordsTextField.setText(KEYWORDS);
+                    keywordsTextField.setText(Filters.KEYWORDS);
                 }
             }
         });
 
-        locationTextField = Utility.textFieldGenerator(15,460,150,35, PLACE);
+        locationTextField = Utility.textFieldGenerator(15,460,150,35, Filters.PLACE);
         locationTextField.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {
-                if (locationTextField.getText().equals(PLACE)) {
+                if (locationTextField.getText().equals(Filters.PLACE)) {
                     locationTextField.setText("");
                 }
             }
@@ -245,16 +242,16 @@ public class SearchEventsUI extends JPanel {
             @Override
             public void focusLost(FocusEvent e) {
                 if (locationTextField.getText().equals("")) {
-                    locationTextField.setText(PLACE);
+                    locationTextField.setText(Filters.PLACE);
                 }
             }
         });
 
-        availableSpacesTextField = Utility.textFieldGenerator(185,460,150,35, AVAILABLE_SPACES);
+        availableSpacesTextField = Utility.textFieldGenerator(185,460,150,35, Filters.AVAILABLE_SPACES);
         availableSpacesTextField.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {
-                if (availableSpacesTextField.getText().equals(AVAILABLE_SPACES)) {
+                if (availableSpacesTextField.getText().equals(Filters.AVAILABLE_SPACES)) {
                     availableSpacesTextField.setText("");
                 }
             }
@@ -262,7 +259,7 @@ public class SearchEventsUI extends JPanel {
             @Override
             public void focusLost(FocusEvent e) {
                 if (availableSpacesTextField.getText().equals("")) {
-                    availableSpacesTextField.setText(AVAILABLE_SPACES);
+                    availableSpacesTextField.setText(Filters.AVAILABLE_SPACES);
                 }
             }
         });
