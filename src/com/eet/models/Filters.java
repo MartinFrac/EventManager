@@ -1,8 +1,6 @@
 package com.eet.models;
 
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.List;
 
 public class Filters {
 
@@ -13,6 +11,11 @@ public class Filters {
     private Timestamp endDate;
     private String keywords;
     private int availableSpaces;
+
+    public static final String TITLE = "Name of the event";
+    public static final String PLACE = "Place";
+    public static final String AVAILABLE_SPACES = "Available spaces";
+    public static final String KEYWORDS = "Keywords";
 
     public String getTitle() {
         return title;

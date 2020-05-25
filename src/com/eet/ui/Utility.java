@@ -1,6 +1,8 @@
 package com.eet.ui;
 
+import com.eet.controllers.EventController;
 import com.eet.models.Filters;
+import com.eet.ui.views.CreateEventUI;
 import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
@@ -9,17 +11,13 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Properties;
 
 public class Utility {
-
-    public static final String TITLE = "Name of the event";
-    public static final String PLACE = "Place";
-    public static final String AVAILABLE_SPACES = "Available spaces";
-    public static final String KEYWORDS = "Keywords";
 
     public static JTextField textFieldGenerator(int x, int y, int width, int height, String text) {
         JTextField textField = new JTextField();
@@ -35,6 +33,16 @@ public class Utility {
 
     public static JDatePickerImpl datePickerGenerator(int x, int y, int width, int height) {
         UtilDateModel utilDateModel = new UtilDateModel();
+        JDatePanelImpl jDatePanel = new JDatePanelImpl(utilDateModel, new Properties());
+        JDatePickerImpl datePicker = new JDatePickerImpl(jDatePanel, new DateLabelFormatter());
+        datePicker.setBounds(x, y, width, height);
+        return datePicker;
+    }
+
+    public static JDatePickerImpl datePickerGenerator(int x, int y, int width, int height, LocalDate localDate) {
+        UtilDateModel utilDateModel = new UtilDateModel();
+        utilDateModel.setDate(localDate.getYear(), localDate.getMonthValue(), localDate.getDayOfMonth());
+        utilDateModel.setSelected(true);
         JDatePanelImpl jDatePanel = new JDatePanelImpl(utilDateModel, new Properties());
         JDatePickerImpl datePicker = new JDatePickerImpl(jDatePanel, new DateLabelFormatter());
         datePicker.setBounds(x, y, width, height);
@@ -89,16 +97,16 @@ public class Utility {
                 return null;
             }
         }
-        if (TITLE.equals(title)) {
+        if (Filters.TITLE.equals(title)) {
             title = "";
         }
-        if (PLACE.equals(place)) {
+        if (Filters.PLACE.equals(place)) {
             place = "";
         }
-        if (AVAILABLE_SPACES.equals(availableSpaces)) {
+        if (Filters.AVAILABLE_SPACES.equals(availableSpaces)) {
             availableSpaces = "-1";
         }
-        if (KEYWORDS.equals(keywords)) {
+        if (Filters.KEYWORDS.equals(keywords)) {
             keywords = "";
         } else {
             String[] array = keywords.split(" ");
@@ -148,5 +156,106 @@ public class Utility {
         filters.setEndDate(endTimestamp);
 
         return filters;
+    }
+
+    public static HashMap<String, Object> validateEventData(HashMap<String, Object> map, EventController eventController) {
+        String name = (String) map.get("name");
+        String type = (String) map.get("type");
+        String place = (String) map.get("place");
+        String spaceLimit = (String) map.get("spaceLimit");
+        Date startDate = (Date) map.get("startDate");
+        Date endDate = (Date) map.get("endDate");
+
+        String startHour = (String) map.get("startHour");
+        String startMinute = (String) map.get("startMinute");
+
+        Boolean isRepeatable = (Boolean) map.get("isRepeatable");
+        String weekDay = (String) map.get("weekDay");
+        String monthDay = (String) map.get("monthDay");
+        String description = (String) map.get("description");
+        int spacelimitInt = 0;
+
+        String time = startHour + ":" + startMinute;
+        map.put("time", time);
+
+        if (CreateEventUI.NAME.equals(name)) {
+            JOptionPane.showMessageDialog(new JFrame(),
+                    "Value in Name cannot be empty",
+                    "Inane warning",
+                    JOptionPane.WARNING_MESSAGE);
+            return null;
+        }
+        if (eventController.checkIfExistsByName(name)) {
+            JOptionPane.showMessageDialog(new JFrame(),
+                    "Event with that name already exists",
+                    "Inane warning",
+                    JOptionPane.WARNING_MESSAGE);
+            return null;
+        }
+        if (CreateEventUI.PLACE.equals(place)) {
+            JOptionPane.showMessageDialog(new JFrame(),
+                    "Value in place cannot be empty",
+                    "Inane warning",
+                    JOptionPane.WARNING_MESSAGE);
+            return null;
+        }
+        if (CreateEventUI.SPACE_LIMIT.equals(spaceLimit)) {
+            JOptionPane.showMessageDialog(new JFrame(),
+                    "Value in Space Limit cannot be empty",
+                    "Inane warning",
+                    JOptionPane.WARNING_MESSAGE);
+            return null;
+        }
+        try {
+            spacelimitInt = Integer.parseInt(spaceLimit);
+        } catch (NumberFormatException numberFormatException) {
+            JOptionPane.showMessageDialog(new JFrame(),
+                    "Value in Space Limit field is not an Integer",
+                    "Inane warning",
+                    JOptionPane.WARNING_MESSAGE);
+            return null;
+        }
+        if (spacelimitInt<-1) {
+            JOptionPane.showMessageDialog(new JFrame(),
+                    "Value in Space Limit field is negative",
+                    "Inane warning",
+                    JOptionPane.WARNING_MESSAGE);
+            return null;
+        }
+        map.put("spaceLimit", spacelimitInt);
+        if (startDate==null) {
+            JOptionPane.showMessageDialog(new JFrame(),
+                    "Value in Start Date is not selected",
+                    "Inane warning",
+                    JOptionPane.WARNING_MESSAGE);
+            return null;
+        }
+        if (endDate==null) {
+            JOptionPane.showMessageDialog(new JFrame(),
+                    "Value in End Date is not selected",
+                    "Inane warning",
+                    JOptionPane.WARNING_MESSAGE);
+            return null;
+        }
+        if (isRepeatable && (weekDay.equals("-") && monthDay.equals("-"))) {
+            JOptionPane.showMessageDialog(new JFrame(),
+                    "Repetition needs to be specified",
+                    "Inane warning",
+                    JOptionPane.WARNING_MESSAGE);
+            return null;
+        }
+        if (weekDay.equals("-")) {
+            map.put("weekDay", null);
+        }
+        if (monthDay.equals("-")) {
+            map.put("monthDay", null);
+        } else {
+            map.put("monthDay", monthDay.substring(0,1));
+        }
+        if (CreateEventUI.DESCRIPTION.equals(description)) {
+            map.put("description", "");
+        }
+
+        return map;
     }
 }
