@@ -19,4 +19,10 @@ public class DateTimeParser {
         }
         return dateTime;
     }
+
+    public static String toSql(LocalDateTime dateTime) {
+        String date = dateTime.toString();
+        date = date.substring(0, date.indexOf('T')) + " " + date.substring(date.indexOf('T') + 1, date.indexOf('T') + 6);
+        return date;
+    }
 }
