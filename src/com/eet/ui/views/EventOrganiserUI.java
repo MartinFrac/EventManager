@@ -69,6 +69,13 @@ public class EventOrganiserUI extends JPanel {
         createEventButton.setFont(new Font("SansSerif",0,20));
         createEventButton.setText("Create Event");
         createEventButton.setVisible(true);
+        createEventButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                CreateEventUI createEventUI = new CreateEventUI();
+                SmallFrame.getjFrame().changePanel(createEventUI);
+            }
+        });
 
         viewOwnEventsButton = new JButton();
         viewOwnEventsButton.setBounds(100,280,200,35);
