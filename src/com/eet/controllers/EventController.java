@@ -50,32 +50,32 @@ public class EventController {
     }
 
     public Object[][] getRepeatableEventsNotBookings (String id) {
-        List<Event> events = eventDao.findRepeatableEventsByUserIdNotBookings(id);
+        List<Event> events = eventDao.findRepeatableEventsByUserIdNotBookingsAndNotOrganised(id);
         return castToArray(events);
     }
 
     public Object[][] getNonRepeatableEventsNotBookings (String id) {
-        List<Event> events = eventDao.findNonRepeatableEventsByUserIdNotBookings(id);
+        List<Event> events = eventDao.findNonRepeatableEventsByUserIdNotBookingsAndNotOrganised(id);
         return castToArray(events);
     }
 
     public Object[][] getRepeatableEventsNotBookings (String id, String name) {
-        List<Event> events = eventDao.findRepeatableEventsByUserIdAndEventNameNotBookings(id, name);
+        List<Event> events = eventDao.findRepeatableEventsByUserIdAndEventNameNotBookingsAndNotOrganised(id, name);
         return castToArray(events);
     }
 
     public Object[][] getNonRepeatableEventsNotBookings (String id, String name) {
-        List<Event> events = eventDao.findNonRepeatableBEventsByUserIdAndEventNameNotBookings(id, name);
+        List<Event> events = eventDao.findNonRepeatableBEventsByUserIdAndEventNameNotBookingsAndNotOrganised(id, name);
         return castToArray(events);
     }
 
     public Object[][] getRepeatableEventsWithFiltersNotBookings(String id, Filters filters) {
-        List<Event> events = eventDao.findRepeatableEventsWithFiltersNotBookings(id, filters);
+        List<Event> events = eventDao.findRepeatableEventsWithFiltersNotBookingsAndNotOrganised(id, filters);
         return castToArray(events);
     }
 
     public Object[][] getNonRepeatableEventsWithFiltersNotBookings(String id, Filters filters) {
-        List<Event> events = eventDao.findNonRepeatableEventsWithFiltersNotBookings(id, filters);
+        List<Event> events = eventDao.findNonRepeatableEventsWithFiltersNotBookingsAndNotOrganised(id, filters);
         return castToArray(events);
     }
 
@@ -156,5 +156,14 @@ public class EventController {
 
     public boolean checkIfExistsByName(String name) {
         return eventDao.checkIfExistsByName(name);
+    }
+
+    public Event getEvent(int id) {
+        return eventDao.findById(id);
+    }
+
+    public void update(HashMap<String, Object> map) {
+        Event event = EventMapper.fromUI(map);
+        eventDao.update(event);
     }
 }

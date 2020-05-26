@@ -1,7 +1,9 @@
 package com.eet.ui.views;
 
 import com.eet.controllers.EventController;
+import com.eet.controllers.EventOrganisingController;
 import com.eet.memory.ActiveUser;
+import com.eet.models.Event;
 import com.eet.models.Filters;
 import com.eet.models.Type;
 import com.eet.ui.*;
@@ -36,6 +38,7 @@ public class ViewBookingsUI extends JPanel {
 	private JComboBox<String> eventTypesComboBox;
 
 	private EventController eventController;
+	private EventOrganisingController eventOrganisingController;
 
 	public JButton getGoBackButton() {
 		return goBackButton;
@@ -45,6 +48,7 @@ public class ViewBookingsUI extends JPanel {
 	public ViewBookingsUI(){
 
 		eventController = new EventController();
+		eventOrganisingController = new EventOrganisingController();
 
 		this.setLayout(null);
 		this.setPreferredSize(new Dimension(900,600));
@@ -299,13 +303,16 @@ public class ViewBookingsUI extends JPanel {
 			public void mouseClicked(MouseEvent e) {
 				if (table.getSelectedColumn() != 7) {
 					Vector row = model.getDataVector().elementAt(table.getSelectedRow());
-					EventDetailsUI eventDetailsUI = new EventDetailsUI();
-					EventFrame eventFrame = EventFrame.getjFrame();
-					if (eventFrame == null) {
-						new EventFrame(eventDetailsUI, eventDetailsUI.getCreateButton(), row);
+					Event event = eventController.getEvent((Integer) row.get(8));
+					boolean isEditable = false;
+					if (ActiveUser.getUser().getRole()==1) {
+						isEditable = true;
 					} else {
-						EventFrame.getjFrame().changePanel(eventDetailsUI, row);
+						isEditable = eventOrganisingController.checkIfExists(ActiveUser.getUser().getId(), event.getId());
 					}
+					EventDetailsUI eventDetailsUI = new EventDetailsUI(event, isEditable);
+					SmallFrame smallFrame = new SmallFrame(eventDetailsUI);
+					smallFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 				}
 			}
 		});
