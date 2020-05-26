@@ -1,6 +1,7 @@
 package com.eet.ui;
 
 import com.eet.controllers.EventController;
+import com.eet.models.Event;
 import com.eet.models.Filters;
 import com.eet.ui.views.CreateEventUI;
 import org.jdatepicker.impl.JDatePanelImpl;
@@ -185,12 +186,14 @@ public class Utility {
                     JOptionPane.WARNING_MESSAGE);
             return null;
         }
-        if (eventController.checkIfExistsByName(name)) {
-            JOptionPane.showMessageDialog(new JFrame(),
-                    "Event with that name already exists",
-                    "Inane warning",
-                    JOptionPane.WARNING_MESSAGE);
-            return null;
+        if (map.get("id") == null) {
+            if (eventController.checkIfExistsByName(name)) {
+                JOptionPane.showMessageDialog(new JFrame(),
+                        "Event with that name already exists",
+                        "Inane warning",
+                        JOptionPane.WARNING_MESSAGE);
+                return null;
+            }
         }
         if (CreateEventUI.PLACE.equals(place)) {
             JOptionPane.showMessageDialog(new JFrame(),
@@ -221,6 +224,16 @@ public class Utility {
                     "Inane warning",
                     JOptionPane.WARNING_MESSAGE);
             return null;
+        }
+        if (map.get("id") != null) {
+            Event event = eventController.getEvent((int) map.get("id"));
+            if (spacelimitInt < (event.getSpaceLimitations() - event.getAvailableSpaces())) {
+                JOptionPane.showMessageDialog(new JFrame(),
+                        "Value in Space Limit field is lesser than amount of spaces already booked",
+                        "Inane warning",
+                        JOptionPane.WARNING_MESSAGE);
+                return null;
+            }
         }
         map.put("spaceLimit", spacelimitInt);
         if (startDate==null) {
