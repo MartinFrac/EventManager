@@ -42,6 +42,9 @@ public class EventMapper {
 
     public static Event fromUI(HashMap<String, Object> map) {
         Event event = new Event();
+        if (map.get("id") != null) {
+            event.setId((int) map.get("id"));
+        }
         if ((Boolean) map.get("isRepeatable")) {
             Repetition repetition = new Repetition();
             repetition.setTime_of_the_day((String) map.get("time"));
