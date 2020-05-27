@@ -29,6 +29,16 @@ public class EventController {
         return castToArray(events);
     }
 
+    public Object[][] getRepeatableEvents (String id) {
+        List<Event> events = eventDao.findRepeatableEventsByUserIdOrganised(id);
+        return castToArray(events);
+    }
+
+    public Object[][] getNonRepeatableEvents (String id) {
+        List<Event> events = eventDao.findNonRepeatableEventsByUserIdOrganised(id);
+        return castToArray(events);
+    }
+
     public Object[][] getRepeatableBookings (String id, String name) {
         List<Event> events = eventDao.findRepeatableBookingsByUserIdAndEventName(id, name);
         return castToArray(events);
@@ -36,6 +46,16 @@ public class EventController {
 
     public Object[][] getNonRepeatableBookings (String id, String name) {
         List<Event> events = eventDao.findNonRepeatableBookingsByUserIdAndEventName(id, name);
+        return castToArray(events);
+    }
+
+    public Object[][] getRepeatableEvents (String id, String name) {
+        List<Event> events = eventDao.findRepeatableEventsByUserIdAndEventNameOrganised(id, name);
+        return castToArray(events);
+    }
+
+    public Object[][] getNonRepeatableEvents (String id, String name) {
+        List<Event> events = eventDao.findNonRepeatableEventsByUserIdAndEventNameOrganised(id, name);
         return castToArray(events);
     }
 
@@ -50,32 +70,42 @@ public class EventController {
     }
 
     public Object[][] getRepeatableEventsNotBookings (String id) {
-        List<Event> events = eventDao.findRepeatableEventsByUserIdNotBookingsAndNotOrganised(id);
+        List<Event> events = eventDao.findRepeatableEventsByUserIdNotBookings(id);
         return castToArray(events);
     }
 
     public Object[][] getNonRepeatableEventsNotBookings (String id) {
-        List<Event> events = eventDao.findNonRepeatableEventsByUserIdNotBookingsAndNotOrganised(id);
+        List<Event> events = eventDao.findNonRepeatableEventsByUserIdNotBookings(id);
         return castToArray(events);
     }
 
     public Object[][] getRepeatableEventsNotBookings (String id, String name) {
-        List<Event> events = eventDao.findRepeatableEventsByUserIdAndEventNameNotBookingsAndNotOrganised(id, name);
+        List<Event> events = eventDao.findRepeatableEventsByUserIdAndEventNameNotBookings(id, name);
         return castToArray(events);
     }
 
     public Object[][] getNonRepeatableEventsNotBookings (String id, String name) {
-        List<Event> events = eventDao.findNonRepeatableBEventsByUserIdAndEventNameNotBookingsAndNotOrganised(id, name);
+        List<Event> events = eventDao.findNonRepeatableBEventsByUserIdAndEventNameNotBookings(id, name);
         return castToArray(events);
     }
 
     public Object[][] getRepeatableEventsWithFiltersNotBookings(String id, Filters filters) {
-        List<Event> events = eventDao.findRepeatableEventsWithFiltersNotBookingsAndNotOrganised(id, filters);
+        List<Event> events = eventDao.findRepeatableEventsWithFiltersNotBookings(id, filters);
         return castToArray(events);
     }
 
     public Object[][] getNonRepeatableEventsWithFiltersNotBookings(String id, Filters filters) {
-        List<Event> events = eventDao.findNonRepeatableEventsWithFiltersNotBookingsAndNotOrganised(id, filters);
+        List<Event> events = eventDao.findNonRepeatableEventsWithFiltersNotBookings(id, filters);
+        return castToArray(events);
+    }
+
+    public Object[][] getRepeatableEventsWithFiltersOrganised(String id, Filters filters) {
+        List<Event> events = eventDao.findRepeatableEventsWithFiltersOrganised(id, filters);
+        return castToArray(events);
+    }
+
+    public Object[][] getNonRepeatableEventsWithFiltersOrganised(String id, Filters filters) {
+        List<Event> events = eventDao.findNonRepeatableEventsWithFiltersOrganised(id, filters);
         return castToArray(events);
     }
 
@@ -96,7 +126,7 @@ public class EventController {
     }
 
     private Object[] format(Event event) {
-        Object[] object = new Object[9];
+        Object[] object = new Object[8];
         String spaces = event.getAvailableSpaces() + "/" + event.getSpaceLimitations();
         String type = event.getType().toString().toLowerCase();
         type = type.substring(0,1).toUpperCase() + type.substring(1);
@@ -113,8 +143,7 @@ public class EventController {
         object[4] = duration;
         object[5] = spaces;
         object[6] = event.getPlace();
-        object[7] = "Cancel";
-        object[8] = event.getId();
+        object[7] = event.getId();
         return object;
     }
 

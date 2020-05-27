@@ -85,6 +85,14 @@ public class EventOrganiserUI extends JPanel {
         viewOwnEventsButton.setFont(new Font("SansSerif",0,20));
         viewOwnEventsButton.setText("View Own Events");
         viewOwnEventsButton.setVisible(true);
+        viewOwnEventsButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ViewEventsUI viewEventsUI = new ViewEventsUI();
+                SmallFrame.getjFrame().dispose();
+                new BigFrame(viewEventsUI, viewEventsUI.getGoBackButton());
+            }
+        });
 
         logoutButton = new JButton();
         logoutButton.setBounds(125,400,150,35);

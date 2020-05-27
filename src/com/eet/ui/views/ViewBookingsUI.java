@@ -5,22 +5,14 @@ import com.eet.controllers.EventOrganisingController;
 import com.eet.memory.ActiveUser;
 import com.eet.models.Event;
 import com.eet.models.Filters;
-import com.eet.models.Type;
 import com.eet.ui.*;
-import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
-import org.jdatepicker.impl.UtilDateModel;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.sql.Timestamp;
 import java.util.*;
 import javax.swing.*;
-import javax.swing.event.CellEditorListener;
-import javax.swing.event.ChangeEvent;
 import javax.swing.table.DefaultTableModel;
-
-import static com.eet.ui.Utility.*;
 
 public class ViewBookingsUI extends JPanel {
 
@@ -41,6 +33,17 @@ public class ViewBookingsUI extends JPanel {
 
 	private EventController eventController;
 	private EventOrganisingController eventOrganisingController;
+
+	private static final String[] columnNames = {"Title",
+			"Type",
+			"Description",
+			"Start Date",
+			"Duration",
+			"Spaces",
+			"Place",
+			"Click to cancel",
+			"id"
+	};
 
 	public JButton getGoBackButton() {
 		return goBackButton;
@@ -100,7 +103,7 @@ public class ViewBookingsUI extends JPanel {
 						} else {
 							data = eventController.getRepeatableBookingsWithFilters(ActiveUser.getUser().getId(), filters);
 						}
-						Utility.updateData(data, model);
+						Utility.updateData(data, columnNames.length, model);
 					}
 				} catch (ClassCastException exception) {
 					System.out.println(exception.getMessage());
@@ -164,7 +167,7 @@ public class ViewBookingsUI extends JPanel {
 				} else {
 					data = eventController.getRepeatableBookings(userId, name);
 				}
-				Utility.updateData(data, model);
+				Utility.updateData(data, columnNames.length, model);
 			}
 		});
 
@@ -183,7 +186,7 @@ public class ViewBookingsUI extends JPanel {
 					Object[][] data = eventController.getRepeatableBookings(ActiveUser.getUser().getId());
 					table.getColumnModel().getColumn(3).setHeaderValue("Repetition");
 					table.getTableHeader().repaint();
-					Utility.updateData(data, model);
+					Utility.updateData(data, columnNames.length, model);
 					repeatableButton.setText("One time Events");
 					int[] widths = {150, 60, 110, 200, 60, 70, 150, 100, 0};
 					for (int i = 0; i<widths.length; i++) {
@@ -195,7 +198,7 @@ public class ViewBookingsUI extends JPanel {
 					Object[][] data = eventController.getNonRepeatableBookings(ActiveUser.getUser().getId());
 					table.getColumnModel().getColumn(3).setHeaderValue("Start Date");
 					table.getTableHeader().repaint();
-					Utility.updateData(data, model);
+					Utility.updateData(data, columnNames.length, model);
 					repeatableButton.setText("Repeatable Events");
 					int[] widths = {150, 60, 190, 120, 60, 70, 150, 100, 0};
 					for (int i = 0; i<widths.length; i++) {
@@ -274,24 +277,13 @@ public class ViewBookingsUI extends JPanel {
 			}
 		});
 
-		String[] columnNames = {"Title",
-				"Type",
-				"Description",
-				"Start Date",
-				"Duration",
-				"Spaces",
-				"Place",
-				"Click to cancel",
-				"id"
-		};
-
 		Object[][] data = eventController.getNonRepeatableBookings(ActiveUser.getUser().getId());
 
 		table = new JTable();
 		table.setRowHeight(40);
 		model = new DefaultTableModel();
 		model.setColumnIdentifiers(columnNames);
-		Utility.updateData(data, model);
+		Utility.updateData(data, columnNames.length, model);
 		table.setModel(model);
 		int[] widths = {150, 60, 190, 120, 60, 70, 150, 100, 0};
 		for (int i = 0; i<widths.length; i++) {
@@ -304,7 +296,7 @@ public class ViewBookingsUI extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				DefaultTableModel tableModel = (DefaultTableModel) table.getModel();
-				int eventId = (int) tableModel.getValueAt(rendererAndEditor.getRow(), 8);
+				int eventId = (int) tableModel.getValueAt(rendererAndEditor.getRow(), columnNames.length-1);
 				tableModel.removeRow(rendererAndEditor.getRow());
 				eventController.deleteBooking(eventId, ActiveUser.getUser().getId());
 			}

@@ -13,4 +13,8 @@ public class EventOrganisingController {
     public Boolean checkIfExists(String userId, int eventId) {
         return eventOrganisingDao.findByUserIdAndEventId(userId, eventId);
     }
+
+    public void delete(int eventId) {
+        eventOrganisingDao.deleteById(eventId);
+    }
 }

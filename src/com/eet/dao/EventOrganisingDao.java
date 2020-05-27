@@ -27,4 +27,29 @@ public class EventOrganisingDao {
         }
         return false;
     }
+
+    public void deleteById(int eventId) {
+        String query = "DELETE FROM EVENT_ORGANISING WHERE event_id = ?";
+        String deleteBookings = "DELETE FROM BOOKING WHERE event_id = ?";
+        String deleteEvent = "DELETE FROM EVENT WHERE id = ?";
+        try (Connection connection = SqliteConnection.getConnection()) {
+            PreparedStatement pstmt = connection.prepareStatement(query);
+            pstmt.setInt(1, eventId);
+            pstmt.executeUpdate();
+            pstmt.close();
+
+            PreparedStatement deleteBookingsPstmt = connection.prepareStatement(deleteBookings);
+            deleteBookingsPstmt.setInt(1, eventId);
+            deleteBookingsPstmt.executeUpdate();
+            deleteBookingsPstmt.close();
+
+            PreparedStatement deleteEventPstmt = connection.prepareStatement(deleteEvent);
+            deleteEventPstmt.setInt(1, eventId);
+            deleteEventPstmt.executeUpdate();
+            deleteEventPstmt.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }

@@ -38,6 +38,17 @@ public class SearchEventsUI extends JPanel {
     private EventOrganisingController eventOrganisingController;
     private BookingController bookingController;
 
+    private static final String[] columnNames = {"Title",
+            "Type",
+            "Description",
+            "Start Date",
+            "Duration",
+            "Spaces",
+            "Place",
+            "Click to cancel",
+            "id"
+    };
+
     public JButton getGoBackButton() {
         return goBackButton;
     }
@@ -97,7 +108,7 @@ public class SearchEventsUI extends JPanel {
                         } else {
                             data = eventController.getRepeatableEventsWithFiltersNotBookings(ActiveUser.getUser().getId(), filters);
                         }
-                        Utility.updateData(data, model);
+                        Utility.updateData(data, columnNames.length, model);
                     }
                 } catch (ClassCastException exception) {
                     System.out.println(exception.getMessage());
@@ -161,7 +172,7 @@ public class SearchEventsUI extends JPanel {
                 } else {
                     data = eventController.getRepeatableEventsNotBookings(userId, name);
                 }
-                Utility.updateData(data, model);
+                Utility.updateData(data, columnNames.length, model);
             }
         });
 
@@ -180,7 +191,7 @@ public class SearchEventsUI extends JPanel {
                     Object[][] data = eventController.getRepeatableEventsNotBookings(ActiveUser.getUser().getId());
                     table.getColumnModel().getColumn(3).setHeaderValue("Repetition");
                     table.getTableHeader().repaint();
-                    Utility.updateData(data, model);
+                    Utility.updateData(data, columnNames.length, model);
                     repeatableButton.setText("One time Events");
                     int[] widths = {150, 60, 110, 200, 60, 70, 150, 100, 0};
                     for (int i = 0; i<widths.length; i++) {
@@ -192,7 +203,7 @@ public class SearchEventsUI extends JPanel {
                     Object[][] data = eventController.getNonRepeatableEventsNotBookings(ActiveUser.getUser().getId());
                     table.getColumnModel().getColumn(3).setHeaderValue("Start Date");
                     table.getTableHeader().repaint();
-                    Utility.updateData(data, model);
+                    Utility.updateData(data, columnNames.length, model);
                     repeatableButton.setText("Repeatable Events");
                     int[] widths = {150, 60, 190, 120, 60, 70, 150, 100, 0};
                     for (int i = 0; i<widths.length; i++) {
@@ -271,24 +282,26 @@ public class SearchEventsUI extends JPanel {
             }
         });
 
-        String[] columnNames = {"Title",
-                "Type",
-                "Description",
-                "Start Date",
-                "Duration",
-                "Spaces",
-                "Place",
-                "Click to cancel",
-                "id"
-        };
-
         Object[][] data = eventController.getNonRepeatableEventsNotBookings(ActiveUser.getUser().getId());
+//        Object[][] formattedData = new Object[data.length][columnNames.length];
+//        for (int j = 0; j < data.length; j++) {
+//            for (int i = 0; i < columnNames.length - 1; i++) {
+//                if (i < 7) {
+//                    formattedData[j][i] = data[j][i];
+//                } else if (i == formattedData.length-1) {
+//                    formattedData[j][i] = data[j][data.length-1];
+//                }
+//                else {
+//                    formattedData[j][i] = "";
+//                }
+//            }
+//        }
 
         table = new JTable();
         table.setRowHeight(40);
         model = new DefaultTableModel();
         model.setColumnIdentifiers(columnNames);
-        Utility.updateData(data, model);
+        Utility.updateData(data, columnNames.length, model);
         table.setModel(model);
         int[] widths = {150, 60, 190, 120, 60, 70, 150, 100, 0};
         for (int i = 0; i<widths.length; i++) {
@@ -300,7 +313,7 @@ public class SearchEventsUI extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 DefaultTableModel tableModel = (DefaultTableModel) table.getModel();
-                int eventId = (int) tableModel.getValueAt(rendererAndEditor.getRow(), 8);
+                int eventId = (int) tableModel.getValueAt(rendererAndEditor.getRow(), columnNames.length-1);
                 tableModel.removeRow(rendererAndEditor.getRow());
                 bookingController.create(ActiveUser.getUser().getId(), eventId);
             }

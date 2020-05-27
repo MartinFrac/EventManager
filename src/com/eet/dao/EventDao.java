@@ -57,18 +57,16 @@ public class EventDao {
         return events;
     }
 
-    public List<Event> findRepeatableEventsByUserIdNotBookingsAndNotOrganised(String id) {
+    public List<Event> findRepeatableEventsByUserIdNotBookings(String id) {
         List<Event> events = new ArrayList<>();
         String query = "SELECT e.id, e.repetition_id, r.time_of_the_day, r.day_of_the_week, r.day_of_the_month, " +
                 "e.type_id, e.title, e.description, e.start, e.end, e.available_spaces, e.space_limitations, e.place " +
                 "FROM EVENT AS e LEFT JOIN REPETITION AS r ON r.id = e.repetition_id " +
-                "WHERE e.id NOT IN (SELECT e.id FROM EVENT AS e INNER JOIN BOOKING AS b on e.id = b.event_id WHERE b.user_id = ? UNION " +
-                "SELECT e.id FROM EVENT AS e INNER JOIN EVENT_ORGANISING AS eo on e.id = eo.event_id WHERE eo.user_id = ?) " +
+                "WHERE e.id NOT IN (SELECT e.id FROM EVENT AS e INNER JOIN BOOKING AS b on e.id = b.event_id WHERE b.user_id = ? ) " +
                 "AND e.repetition_id IS NOT NULL";
         try (Connection connection = SqliteConnection.getConnection();
              PreparedStatement pstmt = connection.prepareStatement(query)) {
             pstmt.setString(1, id);
-            pstmt.setString(2, id);
             ResultSet resultSet = pstmt.executeQuery();
 
             while (resultSet.next()) {
@@ -81,16 +79,58 @@ public class EventDao {
         return events;
     }
 
-    public List<Event> findNonRepeatableEventsByUserIdNotBookingsAndNotOrganised(String id) {
+    public List<Event> findNonRepeatableEventsByUserIdNotBookings(String id) {
         List<Event> events = new ArrayList<>();
         String query = "SELECT e.id, e.repetition_id, e.type_id, e.title, e.description, e.start, e.end, e.available_spaces, e.space_limitations, e.place "+
-        "FROM EVENT AS e WHERE e.id NOT IN (SELECT e.id FROM EVENT AS e INNER JOIN BOOKING AS b on e.id = b.event_id WHERE b.user_id = ? UNION " +
-        "SELECT e.id FROM EVENT AS e INNER JOIN EVENT_ORGANISING AS eo on e.id = eo.event_id WHERE eo.user_id = ?) " +
+        "FROM EVENT AS e WHERE e.id NOT IN (SELECT e.id FROM EVENT AS e INNER JOIN BOOKING AS b on e.id = b.event_id WHERE b.user_id = ? ) " +
         "AND e.repetition_id IS NULL";
         try (Connection connection = SqliteConnection.getConnection();
              PreparedStatement pstmt = connection.prepareStatement(query)) {
             pstmt.setString(1, id);
-            pstmt.setString(2, id);
+            ResultSet resultSet = pstmt.executeQuery();
+
+            while (resultSet.next()) {
+                Event event = EventMapper.fromSql(resultSet);
+                events.add(event);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return events;
+    }
+
+    public List<Event> findRepeatableEventsByUserIdOrganised(String id) {
+        List<Event> events = new ArrayList<>();
+        String query = "SELECT e.id, e.repetition_id, r.time_of_the_day, r.day_of_the_week, r.day_of_the_month, " +
+                "e.type_id, e.title, e.description, e.start, e.end, e.available_spaces, e.space_limitations, e.place "+
+                "FROM EVENT AS e INNER JOIN EVENT_ORGANISING AS eo on e.id = eo.event_id " +
+                "LEFT JOIN REPETITION AS r ON r.id = e.repetition_id " +
+                "WHERE eo.user_id = ?" +
+                "AND e.repetition_id IS NOT NULL";
+        try (Connection connection = SqliteConnection.getConnection();
+             PreparedStatement pstmt = connection.prepareStatement(query)) {
+            pstmt.setString(1, id);
+            ResultSet resultSet = pstmt.executeQuery();
+
+            while (resultSet.next()) {
+                Event event = EventMapper.fromSql(resultSet);
+                events.add(event);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return events;
+    }
+
+    public List<Event> findNonRepeatableEventsByUserIdOrganised(String id) {
+        List<Event> events = new ArrayList<>();
+        String query = "SELECT e.id, e.repetition_id, e.type_id, e.title, e.description, e.start, e.end, e.available_spaces, e.space_limitations, e.place "+
+                "FROM EVENT AS e INNER JOIN EVENT_ORGANISING AS eo on e.id = eo.event_id " +
+                "WHERE eo.user_id = ?" +
+                "AND e.repetition_id IS NULL";
+        try (Connection connection = SqliteConnection.getConnection();
+             PreparedStatement pstmt = connection.prepareStatement(query)) {
+            pstmt.setString(1, id);
             ResultSet resultSet = pstmt.executeQuery();
 
             while (resultSet.next()) {
@@ -155,21 +195,21 @@ public class EventDao {
         return events;
     }
 
-    public List<Event> findRepeatableEventsByUserIdAndEventNameNotBookingsAndNotOrganised(String id, String name) {
+
+
+    public List<Event> findRepeatableEventsByUserIdAndEventNameNotBookings(String id, String name) {
         List<Event> events = new ArrayList<>();
         String query = "SELECT e.id, e.repetition_id, r.time_of_the_day, r.day_of_the_week, r.day_of_the_month, e.type_id, " +
                 "e.title, e.description, e.start, e.end, e.space_limitations, e.available_spaces, e.place " +
                 "FROM EVENT AS e LEFT JOIN REPETITION AS r ON r.id = e.repetition_id " +
                 "WHERE e.repetition_id IS NOT NULL " +
-                "AND e.id NOT IN (SELECT e.id FROM EVENT AS e INNER JOIN BOOKING AS b on e.id = b.event_id WHERE b.user_id = ? UNION " +
-                "SELECT e.id FROM EVENT AS e INNER JOIN EVENT_ORGANISING AS eo on e.id = eo.event_id WHERE eo.user_id = ?) " +
+                "AND e.id NOT IN (SELECT e.id FROM EVENT AS e INNER JOIN BOOKING AS b on e.id = b.event_id WHERE b.user_id = ? ) " +
                 "AND (CASE WHEN ? = '' THEN TRUE ELSE e.title LIKE '%'|| ? ||'%' END)";
         try (Connection connection = SqliteConnection.getConnection();
              PreparedStatement pstmt = connection.prepareStatement(query)) {
             pstmt.setString(1, id);
-            pstmt.setString(2, id);
+            pstmt.setString(2, name);
             pstmt.setString(3, name);
-            pstmt.setString(4, name);
             ResultSet resultSet = pstmt.executeQuery();
 
             while (resultSet.next()) {
@@ -182,20 +222,68 @@ public class EventDao {
         return events;
     }
 
-    public List<Event> findNonRepeatableBEventsByUserIdAndEventNameNotBookingsAndNotOrganised(String id, String name) {
+    public List<Event> findNonRepeatableBEventsByUserIdAndEventNameNotBookings(String id, String name) {
         List<Event> events = new ArrayList<>();
         String query = "SELECT e.id, e.repetition_id, e.type_id, e.title, e.description, e.start, e.end, e.space_limitations, e.available_spaces, e.place " +
                 "FROM EVENT AS e " +
                 "WHERE e.repetition_id IS NULL " +
-                "AND e.id NOT IN (SELECT e.id FROM EVENT AS e INNER JOIN BOOKING AS b on e.id = b.event_id WHERE b.user_id = ? UNION " +
-                "SELECT e.id FROM EVENT AS e INNER JOIN EVENT_ORGANISING AS eo on e.id = eo.event_id WHERE eo.user_id = ?) " +
+                "AND e.id NOT IN (SELECT e.id FROM EVENT AS e INNER JOIN BOOKING AS b on e.id = b.event_id WHERE b.user_id = ? ) " +
                 "AND (CASE WHEN ? = '' THEN TRUE ELSE e.title LIKE '%'|| ? ||'%' END)";
         try (Connection connection = SqliteConnection.getConnection();
              PreparedStatement pstmt = connection.prepareStatement(query)) {
             pstmt.setString(1, id);
-            pstmt.setString(2, id);
+            pstmt.setString(2, name);
             pstmt.setString(3, name);
-            pstmt.setString(4, name);
+            ResultSet resultSet = pstmt.executeQuery();
+
+            while (resultSet.next()) {
+                Event event = EventMapper.fromSql(resultSet);
+                events.add(event);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return events;
+    }
+
+    public List<Event> findRepeatableEventsByUserIdAndEventNameOrganised(String id, String name) {
+        List<Event> events = new ArrayList<>();
+        String query = "SELECT e.id, e.repetition_id, r.time_of_the_day, r.day_of_the_week, r.day_of_the_month, e.type_id, " +
+                "e.title, e.description, e.start, e.end, e.space_limitations, e.available_spaces, e.place " +
+                "FROM EVENT AS e LEFT JOIN REPETITION AS r ON r.id = e.repetition_id " +
+                "INNER JOIN EVENT_ORGANISING AS eo on e.id = eo.event_id " +
+                "WHERE e.repetition_id IS NOT NULL " +
+                "AND eo.user_id = ? " +
+                "AND (CASE WHEN ? = '' THEN TRUE ELSE e.title LIKE '%'|| ? ||'%' END)";
+        try (Connection connection = SqliteConnection.getConnection();
+             PreparedStatement pstmt = connection.prepareStatement(query)) {
+            pstmt.setString(1, id);
+            pstmt.setString(2, name);
+            pstmt.setString(3, name);
+            ResultSet resultSet = pstmt.executeQuery();
+
+            while (resultSet.next()) {
+                Event event = EventMapper.fromSql(resultSet);
+                events.add(event);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return events;
+    }
+
+    public List<Event> findNonRepeatableEventsByUserIdAndEventNameOrganised(String id, String name) {
+        List<Event> events = new ArrayList<>();
+        String query = "SELECT e.id, e.repetition_id, e.title, e.type_id, e.description, e.start, e.end, e.space_limitations, e.available_spaces, e.place " +
+                "FROM EVENT AS e INNER JOIN EVENT_ORGANISING AS eo on e.id = eo.event_id " +
+                "WHERE e.repetition_id IS NULL " +
+                "AND eo.user_id = ? " +
+                "AND (CASE WHEN ? = '' THEN TRUE ELSE e.title LIKE '%'|| ? ||'%' END)";
+        try (Connection connection = SqliteConnection.getConnection();
+             PreparedStatement pstmt = connection.prepareStatement(query)) {
+            pstmt.setString(1, id);
+            pstmt.setString(2, name);
+            pstmt.setString(3, name);
             ResultSet resultSet = pstmt.executeQuery();
 
             while (resultSet.next()) {
@@ -351,12 +439,11 @@ public class EventDao {
         return events;
     }
 
-    public List<Event> findNonRepeatableEventsWithFiltersNotBookingsAndNotOrganised(String id, Filters filters) {
+    public List<Event> findNonRepeatableEventsWithFiltersNotBookings(String id, Filters filters) {
         List<Event> events = new ArrayList<>();
         String filterQuery = "SELECT e.id, e.repetition_id, e.description, e.type_id, e.title, e.start, e.end, e.available_spaces, e.space_limitations, e.place " +
                 "FROM EVENT AS e " +
-                "WHERE e.id NOT IN (SELECT e.id FROM EVENT AS e INNER JOIN BOOKING AS b on e.id = b.event_id WHERE b.user_id = :user_id UNION " +
-                "SELECT e.id FROM EVENT AS e INNER JOIN EVENT_ORGANISING AS eo on e.id = eo.event_id WHERE eo.user_id = :user_id ) " +
+                "WHERE e.id NOT IN (SELECT e.id FROM EVENT AS e INNER JOIN BOOKING AS b on e.id = b.event_id WHERE b.user_id = :user_id ) " +
                 "AND e.repetition_id IS NULL " +
                 "AND (CASE WHEN :event_title = '' THEN TRUE ELSE e.title LIKE '%'|| :event_title ||'%' END) " +
                 "AND e.type_id = (CASE WHEN :event_type = -1 THEN e.type_id ELSE :event_type END) " +
@@ -415,13 +502,140 @@ public class EventDao {
         return events;
     }
 
-    public List<Event> findRepeatableEventsWithFiltersNotBookingsAndNotOrganised(String id, Filters filters) {
+    public List<Event> findRepeatableEventsWithFiltersNotBookings(String id, Filters filters) {
         List<Event> events = new ArrayList<>();
         String filterQuery = "SELECT e.id, e.repetition_id, r.time_of_the_day, r.day_of_the_week, r.day_of_the_month, " +
                 "e.description, e.type_id, e.title, e.start, e.end, e.available_spaces, e.space_limitations, e.place " +
                 "FROM EVENT AS e INNER JOIN REPETITION AS r on e.repetition_id = r.id " +
-                "WHERE e.id NOT IN (SELECT e.id FROM EVENT AS e INNER JOIN BOOKING AS b on e.id = b.event_id WHERE b.user_id = :user_id UNION " +
-                "SELECT e.id FROM EVENT AS e INNER JOIN EVENT_ORGANISING AS eo on e.id = eo.event_id WHERE eo.user_id = :user_id ) " +
+                "WHERE e.id NOT IN (SELECT e.id FROM EVENT AS e INNER JOIN BOOKING AS b on e.id = b.event_id WHERE b.user_id = :user_id ) " +
+                "AND e.repetition_id IS NOT NULL " +
+                "AND (CASE WHEN :event_title = '' THEN TRUE ELSE e.title LIKE '%'|| :event_title ||'%' END) " +
+                "AND e.type_id = (CASE WHEN :event_type = -1 THEN e.type_id ELSE :event_type END) " +
+                "AND (CASE WHEN :event_place = '' THEN TRUE ELSE e.place LIKE '%'|| :event_place ||'%' END) " +
+                "AND (CASE WHEN :start_date IS NULL THEN TRUE ELSE e.start BETWEEN :start_date AND :end_date END) " +
+                "AND e.available_spaces >= (CASE WHEN :available_spaces = -1 THEN TRUE ELSE :available_spaces END) " +
+                "AND (CASE WHEN :keywords = '' THEN TRUE " +
+                "WHEN e.description_id IS NULL THEN FALSE " +
+                "ELSE e.description_id in (SELECT id FROM description WHERE description MATCH (SELECT var FROM variables)) END);";
+
+        String insertKeywordsQuery = "INSERT INTO variables (var) VALUES (?)";
+        String clearVariablesQuery = "DELETE FROM variables";
+
+        try (Connection connection = SqliteConnection.getConnection();) {
+
+            if (!filters.getKeywords().equals("")) {
+                PreparedStatement insertKeywords = connection.prepareStatement(insertKeywordsQuery);
+                insertKeywords.setString(1, filters.getKeywords());
+                insertKeywords.executeUpdate();
+                insertKeywords.close();
+            }
+
+            NamedParamStatement filterBookings = new NamedParamStatement(connection, filterQuery);
+
+            String startDate = null;
+            String endDate = null;
+            if (filters.getStartDate() != null) {
+                startDate = filters.getStartDate().toString();
+                endDate = filters.getEndDate().toString();
+            }
+
+            filterBookings.setString("user_id", id);
+            filterBookings.setString("event_title", filters.getTitle());
+            filterBookings.setInt("event_type", filters.getType());
+            filterBookings.setString("event_place", filters.getPlace());
+            filterBookings.setString("start_date", startDate);
+            filterBookings.setString("end_date", endDate);
+            filterBookings.setInt("available_spaces", filters.getAvailableSpaces());
+            filterBookings.setString("keywords", filters.getKeywords());
+
+            ResultSet resultSet = filterBookings.executeQuery();
+
+            while (resultSet.next()) {
+                Event event = EventMapper.fromSql(resultSet);
+                events.add(event);
+            }
+            filterBookings.close();
+
+            PreparedStatement clearVariables = connection.prepareStatement(clearVariablesQuery);
+            clearVariables.executeUpdate();
+            clearVariables.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return events;
+    }
+
+    public List<Event> findNonRepeatableEventsWithFiltersOrganised(String id, Filters filters) {
+        List<Event> events = new ArrayList<>();
+        String filterQuery = "SELECT e.id, e.repetition_id, e.description, e.type_id, e.title, e.start, e.end, e.available_spaces, e.space_limitations, e.place " +
+                "FROM EVENT AS e INNER JOIN EVENT_ORGANISING AS eo on e.id = eo.event_id " +
+                "WHERE eo.user_id = :user_id " +
+                "AND e.repetition_id IS NULL " +
+                "AND (CASE WHEN :event_title = '' THEN TRUE ELSE e.title LIKE '%'|| :event_title ||'%' END) " +
+                "AND e.type_id = (CASE WHEN :event_type = -1 THEN e.type_id ELSE :event_type END) " +
+                "AND (CASE WHEN :event_place = '' THEN TRUE ELSE e.place LIKE '%'|| :event_place ||'%' END) " +
+                "AND (CASE WHEN :start_date IS NULL THEN TRUE ELSE e.start BETWEEN :start_date AND :end_date END) " +
+                "AND e.available_spaces >= (CASE WHEN :available_spaces = -1 THEN TRUE ELSE :available_spaces END) " +
+                "AND (CASE WHEN :keywords = '' THEN TRUE " +
+                "WHEN e.description_id IS NULL THEN FALSE " +
+                "ELSE e.description_id in (SELECT id FROM description WHERE description MATCH (SELECT var FROM variables)) END);";
+
+        String insertKeywordsQuery = "INSERT INTO variables (var) VALUES (?)";
+        String clearVariablesQuery = "DELETE FROM variables";
+
+        try (Connection connection = SqliteConnection.getConnection();) {
+
+            if (!filters.getKeywords().equals("")) {
+                PreparedStatement insertKeywords = connection.prepareStatement(insertKeywordsQuery);
+                insertKeywords.setString(1, filters.getKeywords());
+                insertKeywords.executeUpdate();
+                insertKeywords.close();
+            }
+
+            NamedParamStatement filterBookings = new NamedParamStatement(connection, filterQuery);
+
+            String startDate = null;
+            String endDate = null;
+            if (filters.getStartDate() != null) {
+                startDate = filters.getStartDate().toString();
+                endDate = filters.getEndDate().toString();
+            }
+
+            filterBookings.setString("user_id", id);
+            filterBookings.setString("event_title", filters.getTitle());
+            filterBookings.setInt("event_type", filters.getType());
+            filterBookings.setString("event_place", filters.getPlace());
+            filterBookings.setString("start_date", startDate);
+            filterBookings.setString("end_date", endDate);
+            filterBookings.setInt("available_spaces", filters.getAvailableSpaces());
+            filterBookings.setString("keywords", filters.getKeywords());
+
+            ResultSet resultSet = filterBookings.executeQuery();
+
+            while (resultSet.next()) {
+                Event event = EventMapper.fromSql(resultSet);
+                events.add(event);
+            }
+            filterBookings.close();
+
+            PreparedStatement clearVariables = connection.prepareStatement(clearVariablesQuery);
+            clearVariables.executeUpdate();
+            clearVariables.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return events;
+    }
+
+    public List<Event> findRepeatableEventsWithFiltersOrganised(String id, Filters filters) {
+        List<Event> events = new ArrayList<>();
+        String filterQuery = "SELECT e.id, e.repetition_id, r.time_of_the_day, r.day_of_the_week, r.day_of_the_month, " +
+                "e.description, e.type_id, e.title, e.start, e.end, e.available_spaces, e.space_limitations, e.place " +
+                "FROM EVENT AS e INNER JOIN EVENT_ORGANISING AS eo on e.id = eo.event_id " +
+                "INNER JOIN REPETITION AS r on e.repetition_id = r.id " +
+                "WHERE eo.user_id = :user_id " +
                 "AND e.repetition_id IS NOT NULL " +
                 "AND (CASE WHEN :event_title = '' THEN TRUE ELSE e.title LIKE '%'|| :event_title ||'%' END) " +
                 "AND e.type_id = (CASE WHEN :event_type = -1 THEN e.type_id ELSE :event_type END) " +

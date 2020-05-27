@@ -50,14 +50,32 @@ public class Utility {
         return datePicker;
     }
 
-    public static void updateData(Object[][] data, DefaultTableModel model) {
+    public static void updateData(Object[][] data, int size, DefaultTableModel model) {
         model.getDataVector().removeAllElements();
         if(data!=null) {
+            Object[][] formattedData = formatData(data, size);
             for(int i = 0; i < data.length; i++) {
-                model.addRow(data[i]);
+                model.addRow(formattedData[i]);
             }
         }
         model.fireTableDataChanged();
+    }
+
+    public static Object[][] formatData(Object[][] data, int size) {
+        Object[][] formattedData = new Object[data.length][size];
+        for (int j = 0; j < data.length; j++) {
+            for (int i = 0; i < size; i++) {
+                if (i < 7) {
+                    formattedData[j][i] = data[j][i];
+                } else if (i == size-1) {
+                    formattedData[j][i] = data[j][7];
+                }
+                else {
+                    formattedData[j][i] = "";
+                }
+            }
+        }
+        return formattedData;
     }
 
     public static Timestamp dateToTimestamp(Date date) {
