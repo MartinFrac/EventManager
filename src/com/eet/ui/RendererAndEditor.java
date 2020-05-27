@@ -19,18 +19,17 @@ public class RendererAndEditor implements TableCellRenderer, TableCellEditor {
     private int row;
     private EventController eventController;
 
+    public int getRow() {
+        return row;
+    }
+
     public RendererAndEditor(JTable table, String name) {
         eventController = new EventController();
         button = new JButton(name);
-        button.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                DefaultTableModel tableModel = (DefaultTableModel) table.getModel();
-                int eventId = (int) tableModel.getValueAt(row, 8);
-                tableModel.removeRow(row);
-                eventController.deleteBooking(eventId, ActiveUser.getUser().getId());
-            }
-        });
+    }
+
+    public void addActionListener(ActionListener actionListener) {
+        button.addActionListener(actionListener);
     }
 
     @Override

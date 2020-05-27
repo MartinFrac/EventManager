@@ -16,6 +16,8 @@ import java.awt.event.*;
 import java.sql.Timestamp;
 import java.util.*;
 import javax.swing.*;
+import javax.swing.event.CellEditorListener;
+import javax.swing.event.ChangeEvent;
 import javax.swing.table.DefaultTableModel;
 
 import static com.eet.ui.Utility.*;
@@ -296,8 +298,20 @@ public class ViewBookingsUI extends JPanel {
 			table.getColumnModel().getColumn(i).setMinWidth(widths[i]);
 			table.getColumnModel().getColumn(i).setMaxWidth(widths[i]);
 		}
-		table.getColumnModel().getColumn(7).setCellRenderer(new RendererAndEditor(table, "Cancel"));
-		table.getColumnModel().getColumn(7).setCellEditor(new RendererAndEditor(table, "Cancel"));
+
+		RendererAndEditor rendererAndEditor = new RendererAndEditor(table, "Cancel");
+		ActionListener actionListener = new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				DefaultTableModel tableModel = (DefaultTableModel) table.getModel();
+				int eventId = (int) tableModel.getValueAt(rendererAndEditor.getRow(), 8);
+				tableModel.removeRow(rendererAndEditor.getRow());
+				eventController.deleteBooking(eventId, ActiveUser.getUser().getId());
+			}
+		};
+		rendererAndEditor.addActionListener(actionListener);
+		table.getColumnModel().getColumn(7).setCellRenderer(rendererAndEditor);
+		table.getColumnModel().getColumn(7).setCellEditor(rendererAndEditor);
 		table.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {

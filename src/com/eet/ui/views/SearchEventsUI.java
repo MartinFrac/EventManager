@@ -1,5 +1,6 @@
 package com.eet.ui.views;
 
+import com.eet.controllers.BookingController;
 import com.eet.controllers.EventController;
 import com.eet.controllers.EventOrganisingController;
 import com.eet.memory.ActiveUser;
@@ -35,6 +36,7 @@ public class SearchEventsUI extends JPanel {
 
     private EventController eventController;
     private EventOrganisingController eventOrganisingController;
+    private BookingController bookingController;
 
     public JButton getGoBackButton() {
         return goBackButton;
@@ -45,6 +47,7 @@ public class SearchEventsUI extends JPanel {
 
         eventController = new EventController();
         eventOrganisingController = new EventOrganisingController();
+        bookingController = new BookingController();
 
         this.setLayout(null);
         this.setPreferredSize(new Dimension(900,600));
@@ -292,7 +295,17 @@ public class SearchEventsUI extends JPanel {
             table.getColumnModel().getColumn(i).setMinWidth(widths[i]);
             table.getColumnModel().getColumn(i).setMaxWidth(widths[i]);
         }
-        RendererAndEditor rendererAndEditor = new RendererAndEditor(table, "book");
+        RendererAndEditor rendererAndEditor = new RendererAndEditor(table, "Book");
+        ActionListener actionListener = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                DefaultTableModel tableModel = (DefaultTableModel) table.getModel();
+                int eventId = (int) tableModel.getValueAt(rendererAndEditor.getRow(), 8);
+                tableModel.removeRow(rendererAndEditor.getRow());
+                bookingController.create(ActiveUser.getUser().getId(), eventId);
+            }
+        };
+        rendererAndEditor.addActionListener(actionListener);
         table.getColumnModel().getColumn(7).setCellRenderer(rendererAndEditor);
         table.getColumnModel().getColumn(7).setCellEditor(rendererAndEditor);
         table.addMouseListener(new MouseAdapter() {
