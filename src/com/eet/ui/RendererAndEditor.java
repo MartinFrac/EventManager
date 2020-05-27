@@ -23,7 +23,7 @@ public class RendererAndEditor implements TableCellRenderer, TableCellEditor {
         return row;
     }
 
-    public RendererAndEditor(JTable table, String name) {
+    public RendererAndEditor(String name) {
         eventController = new EventController();
         button = new JButton(name);
     }

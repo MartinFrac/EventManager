@@ -299,7 +299,7 @@ public class ViewBookingsUI extends JPanel {
 			table.getColumnModel().getColumn(i).setMaxWidth(widths[i]);
 		}
 
-		RendererAndEditor rendererAndEditor = new RendererAndEditor(table, "Cancel");
+		RendererAndEditor rendererAndEditor = new RendererAndEditor("Cancel");
 		ActionListener actionListener = new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {

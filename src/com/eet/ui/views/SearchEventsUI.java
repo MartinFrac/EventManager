@@ -295,7 +295,7 @@ public class SearchEventsUI extends JPanel {
             table.getColumnModel().getColumn(i).setMinWidth(widths[i]);
             table.getColumnModel().getColumn(i).setMaxWidth(widths[i]);
         }
-        RendererAndEditor rendererAndEditor = new RendererAndEditor(table, "Book");
+        RendererAndEditor rendererAndEditor = new RendererAndEditor("Book");
         ActionListener actionListener = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
