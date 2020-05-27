@@ -92,6 +92,8 @@ public class Utility {
         return timestamp;
     }
 
+    public static User
+
     public static Filters validateFilters(HashMap<String, String> map, Date startDate, Date endDate) {
 
         Filters filters = new Filters();
