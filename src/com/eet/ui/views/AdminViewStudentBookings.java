@@ -22,7 +22,7 @@ import java.util.Vector;
 public class AdminViewStudentBookings extends JPanel {
 
     private JButton goBackButton;
-    private JLabel searchEventLabel;
+    private JLabel searchBookingLabel;
     private JTextField titleTextField;
     private JTextField keywordsTextField;
     private JTextField locationTextField;
@@ -136,14 +136,14 @@ public class AdminViewStudentBookings extends JPanel {
             }
         });
 
-        searchEventLabel = new JLabel();
-        searchEventLabel.setBounds(5,5,90,35);
-        searchEventLabel.setBackground(new Color(214,217,223));
-        searchEventLabel.setForeground(new Color(0,0,0));
-        searchEventLabel.setEnabled(true);
-        searchEventLabel.setFont(new Font("sansserif",0,12));
-        searchEventLabel.setText("Search event");
-        searchEventLabel.setVisible(true);
+        searchBookingLabel = new JLabel();
+        searchBookingLabel.setBounds(5,5,90,35);
+        searchBookingLabel.setBackground(new Color(214,217,223));
+        searchBookingLabel.setForeground(new Color(0,0,0));
+        searchBookingLabel.setEnabled(true);
+        searchBookingLabel.setFont(new Font("sansserif",0,12));
+        searchBookingLabel.setText("Search Booking");
+        searchBookingLabel.setVisible(true);
 
         searchButton = new JButton();
         searchButton.setBounds(250, 40, 90, 35);
@@ -326,7 +326,7 @@ public class AdminViewStudentBookings extends JPanel {
         this.add(filterButton);
         this.add(searchButton);
         this.add(repeatableButton);
-        this.add(searchEventLabel);
+        this.add(searchBookingLabel);
         this.add(titleTextField);
         this.add(keywordsTextField);
         this.add(locationTextField);

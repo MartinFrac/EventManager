@@ -88,9 +88,9 @@ public class EventOrganiserUI extends JPanel {
         viewOwnEventsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ViewEventsUI viewEventsUI = new ViewEventsUI();
+                ViewOwnEvents viewOwnEvents = new ViewOwnEvents();
                 SmallFrame.getjFrame().dispose();
-                new BigFrame(viewEventsUI, viewEventsUI.getGoBackButton());
+                new BigFrame(viewOwnEvents, viewOwnEvents.getGoBackButton());
             }
         });
 

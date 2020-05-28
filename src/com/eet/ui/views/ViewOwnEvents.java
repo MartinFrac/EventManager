@@ -19,7 +19,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Vector;
 
-public class ViewEventsUI extends JPanel {
+public class ViewOwnEvents extends JPanel {
 
     private JButton goBackButton;
     private JLabel searchEventLabel;
@@ -56,7 +56,7 @@ public class ViewEventsUI extends JPanel {
     }
 
     //Constructor
-    public ViewEventsUI(){
+    public ViewOwnEvents(){
 
         eventController = new EventController();
         eventOrganisingController = new EventOrganisingController();
@@ -314,12 +314,7 @@ public class ViewEventsUI extends JPanel {
                 if (table.getSelectedColumn() != 7) {
                     Vector row = model.getDataVector().elementAt(table.getSelectedRow());
                     Event event = eventController.getEvent((Integer) row.get(columnNames.length-1));
-                    boolean isEditable = false;
-                    if (ActiveUser.getUser().getRole().getLevel()==1) {
-                        isEditable = true;
-                    } else {
-                        isEditable = eventOrganisingController.checkIfExists(ActiveUser.getUser().getId(), event.getId());
-                    }
+                    boolean isEditable = true;
                     EventDetailsUI eventDetailsUI = new EventDetailsUI(event, isEditable);
                     SmallFrame smallFrame = new SmallFrame(eventDetailsUI);
                     smallFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
