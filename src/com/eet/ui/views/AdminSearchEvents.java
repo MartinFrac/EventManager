@@ -6,7 +6,10 @@ import com.eet.controllers.EventOrganisingController;
 import com.eet.memory.ActiveUser;
 import com.eet.models.Event;
 import com.eet.models.Filters;
-import com.eet.ui.*;
+import com.eet.ui.BigFrame;
+import com.eet.ui.RendererAndEditor;
+import com.eet.ui.SmallFrame;
+import com.eet.ui.Utility;
 import org.jdatepicker.impl.JDatePickerImpl;
 
 import javax.swing.*;
@@ -17,7 +20,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Vector;
 
-public class SearchEventsUI extends JPanel {
+public class AdminSearchEvents extends JPanel {
 
     private JButton goBackButton;
     private JLabel searchEventLabel;
@@ -46,15 +49,17 @@ public class SearchEventsUI extends JPanel {
             "Spaces",
             "Place",
             "Book",
+            "Cancel",
             "id"
     };
+    private static final int[] widths = {120, 60, 150, 120, 60, 70, 120, 100, 100, 0};
 
     public JButton getGoBackButton() {
         return goBackButton;
     }
 
     //Constructor
-    public SearchEventsUI(){
+    public AdminSearchEvents(){
 
         eventController = new EventController();
         eventOrganisingController = new EventOrganisingController();
@@ -108,7 +113,7 @@ public class SearchEventsUI extends JPanel {
                         } else {
                             data = eventController.getRepeatableEventsWithFiltersNotBookings(ActiveUser.getUser().getId(), filters);
                         }
-                        Utility.updateData(data,  columnNames.length, 1, model);
+                        Utility.updateData(data,  columnNames.length, 2, model);
                     }
                 } catch (ClassCastException exception) {
                     System.out.println(exception.getMessage());
@@ -172,7 +177,7 @@ public class SearchEventsUI extends JPanel {
                 } else {
                     data = eventController.getRepeatableEventsNotBookings(userId, name);
                 }
-                Utility.updateData(data, columnNames.length, 1, model);
+                Utility.updateData(data, columnNames.length, 2, model);
             }
         });
 
@@ -189,14 +194,14 @@ public class SearchEventsUI extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 Object[][] data;
                 if(repeatableButton.getText().equals("Repeatable Events")) {
+                    int[] newWidths = {120, 60, 100, 170, 60, 70, 120, 100, 100, 0};
                     data = eventController.getRepeatableEventsNotBookings(ActiveUser.getUser().getId());
                     table.getColumnModel().getColumn(3).setHeaderValue("Repetition");
                     table.getTableHeader().repaint();
                     repeatableButton.setText("One time Events");
-                    int[] widths = {150, 60, 110, 200, 60, 70, 150, 100, 0};
-                    for (int i = 0; i<widths.length; i++) {
-                        table.getColumnModel().getColumn(i).setMinWidth(widths[i]);
-                        table.getColumnModel().getColumn(i).setMaxWidth(widths[i]);
+                    for (int i = 0; i<newWidths.length; i++) {
+                        table.getColumnModel().getColumn(i).setMinWidth(newWidths[i]);
+                        table.getColumnModel().getColumn(i).setMaxWidth(newWidths[i]);
                     }
                 }
                 else {
@@ -204,13 +209,12 @@ public class SearchEventsUI extends JPanel {
                     table.getColumnModel().getColumn(3).setHeaderValue("Start Date");
                     table.getTableHeader().repaint();
                     repeatableButton.setText("Repeatable Events");
-                    int[] widths = {150, 60, 190, 120, 60, 70, 150, 100, 0};
                     for (int i = 0; i<widths.length; i++) {
                         table.getColumnModel().getColumn(i).setMinWidth(widths[i]);
                         table.getColumnModel().getColumn(i).setMaxWidth(widths[i]);
                     }
                 }
-                Utility.updateData(data,columnNames.length, 1, model);
+                Utility.updateData(data,columnNames.length, 2, model);
             }
         });
 
@@ -288,34 +292,47 @@ public class SearchEventsUI extends JPanel {
         table.setRowHeight(40);
         model = new DefaultTableModel();
         model.setColumnIdentifiers(columnNames);
-        Utility.updateData(data, columnNames.length, 1, model);
+        Utility.updateData(data, columnNames.length, 2, model);
         table.setModel(model);
-        int[] widths = {150, 60, 190, 120, 60, 70, 150, 100, 0};
         for (int i = 0; i<widths.length; i++) {
             table.getColumnModel().getColumn(i).setMinWidth(widths[i]);
             table.getColumnModel().getColumn(i).setMaxWidth(widths[i]);
         }
-        RendererAndEditor rendererAndEditor = new RendererAndEditor("Book");
-        ActionListener actionListener = new ActionListener() {
+        RendererAndEditor rendererAndEditorBook = new RendererAndEditor("Book");
+        ActionListener actionListenerBook = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 DefaultTableModel tableModel = (DefaultTableModel) table.getModel();
-                int eventId = (int) tableModel.getValueAt(rendererAndEditor.getRow(), columnNames.length-1);
-                tableModel.removeRow(rendererAndEditor.getRow());
+                int eventId = (int) tableModel.getValueAt(rendererAndEditorBook.getRow(), columnNames.length-1);
+                tableModel.removeRow(rendererAndEditorBook.getRow());
                 bookingController.create(ActiveUser.getUser().getId(), eventId);
             }
         };
-        rendererAndEditor.addActionListener(actionListener);
-        table.getColumnModel().getColumn(7).setCellRenderer(rendererAndEditor);
-        table.getColumnModel().getColumn(7).setCellEditor(rendererAndEditor);
+        rendererAndEditorBook.addActionListener(actionListenerBook);
+
+        RendererAndEditor rendererAndEditorCancel = new RendererAndEditor("Cancel");
+        ActionListener actionListenerCancel = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                DefaultTableModel tableModel = (DefaultTableModel) table.getModel();
+                int eventId = (int) tableModel.getValueAt(rendererAndEditorCancel.getRow(), columnNames.length-1);
+                tableModel.removeRow(rendererAndEditorCancel.getRow());
+                eventOrganisingController.delete(eventId);
+            }
+        };
+        rendererAndEditorCancel.addActionListener(actionListenerCancel);
+
+        table.getColumnModel().getColumn(7).setCellRenderer(rendererAndEditorBook);
+        table.getColumnModel().getColumn(7).setCellEditor(rendererAndEditorBook);
+        table.getColumnModel().getColumn(8).setCellRenderer(rendererAndEditorCancel);
+        table.getColumnModel().getColumn(8).setCellEditor(rendererAndEditorCancel);
         table.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (table.getSelectedColumn() != 7) {
+                if ((table.getSelectedColumn() != 7) || (table.getSelectedColumn() != 8)) {
                     Vector row = model.getDataVector().elementAt(table.getSelectedRow());
-                    Event event = eventController.getEvent((Integer) row.get(8));
-                    boolean isEditable = false;
-                    isEditable = eventOrganisingController.checkIfExists(ActiveUser.getUser().getId(), event.getId());
+                    Event event = eventController.getEvent((Integer) row.get(columnNames.length-1));
+                    boolean isEditable = true;
                     EventDetailsUI eventDetailsUI = new EventDetailsUI(event, isEditable);
                     SmallFrame smallFrame = new SmallFrame(eventDetailsUI);
                     smallFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);

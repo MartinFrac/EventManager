@@ -34,9 +34,9 @@ public class AdminUI extends JPanel {
         searchEventsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                SearchEventsUI searchEventsUI = new SearchEventsUI();
+                AdminSearchEvents adminSearchEvents = new AdminSearchEvents();
                 SmallFrame.getjFrame().dispose();
-                new BigFrame(searchEventsUI, searchEventsUI.getGoBackButton());
+                new BigFrame(adminSearchEvents, adminSearchEvents.getGoBackButton());
             }
         });
 
@@ -51,9 +51,9 @@ public class AdminUI extends JPanel {
         searchStudentsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                SearchStudentsUI searchStudentsUI = new SearchStudentsUI();
+                AdminSearchStudentsUI adminSearchStudentsUI = new AdminSearchStudentsUI();
                 SmallFrame.getjFrame().dispose();
-                new BigFrame(searchStudentsUI, searchStudentsUI.getGoBackButton());
+                new BigFrame(adminSearchStudentsUI, adminSearchStudentsUI.getGoBackButton());
             }
         });
 

@@ -15,7 +15,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.HashMap;
 
-public class SearchStudentsUI extends JPanel {
+public class AdminSearchStudentsUI extends JPanel {
 
     private JButton goBackButton;
     private JLabel searchStudentsLabel;
@@ -55,7 +55,7 @@ public class SearchStudentsUI extends JPanel {
     }
 
     //Constructor
-    public SearchStudentsUI(){
+    public AdminSearchStudentsUI(){
 
         userController = new UserController();
 

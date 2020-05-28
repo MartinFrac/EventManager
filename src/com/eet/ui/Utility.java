@@ -7,7 +7,7 @@ import com.eet.models.Filters;
 import com.eet.models.Role;
 import com.eet.models.User;
 import com.eet.ui.views.CreateEventUI;
-import com.eet.ui.views.SearchStudentsUI;
+import com.eet.ui.views.AdminSearchStudentsUI;
 import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
@@ -102,13 +102,13 @@ public class Utility {
         String surname = map.get("surname");
         String role = map.get("role");
 
-        if (SearchStudentsUI.ID.equals(id)) {
+        if (AdminSearchStudentsUI.ID.equals(id)) {
             map.put("id", "");
         }
-        if (SearchStudentsUI.NAME.equals(name)) {
+        if (AdminSearchStudentsUI.NAME.equals(name)) {
             map.put("name", "");
         }
-        if (SearchStudentsUI.SURNAME.equals(surname)) {
+        if (AdminSearchStudentsUI.SURNAME.equals(surname)) {
             map.put("surname", "");
         }
         if (role.equals(Role.USER.toString())) {

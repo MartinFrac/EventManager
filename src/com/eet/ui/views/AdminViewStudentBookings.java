@@ -131,8 +131,8 @@ public class AdminViewStudentBookings extends JPanel {
         goBackButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                SearchStudentsUI searchStudentsUI = new SearchStudentsUI();
-                BigFrame.getjFrame().changePanel(searchStudentsUI);
+                AdminSearchStudentsUI adminSearchStudentsUI = new AdminSearchStudentsUI();
+                BigFrame.getjFrame().changePanel(adminSearchStudentsUI);
             }
         });
 
