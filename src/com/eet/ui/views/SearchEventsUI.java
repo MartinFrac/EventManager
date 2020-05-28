@@ -45,7 +45,7 @@ public class SearchEventsUI extends JPanel {
             "Duration",
             "Spaces",
             "Place",
-            "Click to cancel",
+            "Book",
             "id"
     };
 
@@ -108,7 +108,7 @@ public class SearchEventsUI extends JPanel {
                         } else {
                             data = eventController.getRepeatableEventsWithFiltersNotBookings(ActiveUser.getUser().getId(), filters);
                         }
-                        Utility.updateData(data, columnNames.length, model);
+                        Utility.updateData(data,  columnNames.length, 1, model);
                     }
                 } catch (ClassCastException exception) {
                     System.out.println(exception.getMessage());
@@ -128,7 +128,7 @@ public class SearchEventsUI extends JPanel {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 JPanel jPanel = null;
-                switch (ActiveUser.getUser().getRole()) {
+                switch (ActiveUser.getUser().getRole().getLevel()) {
                     case 1: jPanel = new AdminUI();
                         break;
                     case 2: jPanel = new EventOrganiserUI();
@@ -172,7 +172,7 @@ public class SearchEventsUI extends JPanel {
                 } else {
                     data = eventController.getRepeatableEventsNotBookings(userId, name);
                 }
-                Utility.updateData(data, columnNames.length, model);
+                Utility.updateData(data, columnNames.length, 1, model);
             }
         });
 
@@ -191,7 +191,7 @@ public class SearchEventsUI extends JPanel {
                     Object[][] data = eventController.getRepeatableEventsNotBookings(ActiveUser.getUser().getId());
                     table.getColumnModel().getColumn(3).setHeaderValue("Repetition");
                     table.getTableHeader().repaint();
-                    Utility.updateData(data, columnNames.length, model);
+                    Utility.updateData(data,columnNames.length, 1, model);
                     repeatableButton.setText("One time Events");
                     int[] widths = {150, 60, 110, 200, 60, 70, 150, 100, 0};
                     for (int i = 0; i<widths.length; i++) {
@@ -203,7 +203,7 @@ public class SearchEventsUI extends JPanel {
                     Object[][] data = eventController.getNonRepeatableEventsNotBookings(ActiveUser.getUser().getId());
                     table.getColumnModel().getColumn(3).setHeaderValue("Start Date");
                     table.getTableHeader().repaint();
-                    Utility.updateData(data, columnNames.length, model);
+                    Utility.updateData(data, columnNames.length, 1, model);
                     repeatableButton.setText("Repeatable Events");
                     int[] widths = {150, 60, 190, 120, 60, 70, 150, 100, 0};
                     for (int i = 0; i<widths.length; i++) {
@@ -283,25 +283,12 @@ public class SearchEventsUI extends JPanel {
         });
 
         Object[][] data = eventController.getNonRepeatableEventsNotBookings(ActiveUser.getUser().getId());
-//        Object[][] formattedData = new Object[data.length][columnNames.length];
-//        for (int j = 0; j < data.length; j++) {
-//            for (int i = 0; i < columnNames.length - 1; i++) {
-//                if (i < 7) {
-//                    formattedData[j][i] = data[j][i];
-//                } else if (i == formattedData.length-1) {
-//                    formattedData[j][i] = data[j][data.length-1];
-//                }
-//                else {
-//                    formattedData[j][i] = "";
-//                }
-//            }
-//        }
 
         table = new JTable();
         table.setRowHeight(40);
         model = new DefaultTableModel();
         model.setColumnIdentifiers(columnNames);
-        Utility.updateData(data, columnNames.length, model);
+        Utility.updateData(data, columnNames.length, 1, model);
         table.setModel(model);
         int[] widths = {150, 60, 190, 120, 60, 70, 150, 100, 0};
         for (int i = 0; i<widths.length; i++) {
@@ -328,7 +315,7 @@ public class SearchEventsUI extends JPanel {
                     Vector row = model.getDataVector().elementAt(table.getSelectedRow());
                     Event event = eventController.getEvent((Integer) row.get(8));
                     boolean isEditable = false;
-                    if (ActiveUser.getUser().getRole()==1) {
+                    if (ActiveUser.getUser().getRole().getLevel()==1) {
                         isEditable = true;
                     } else {
                         isEditable = eventOrganisingController.checkIfExists(ActiveUser.getUser().getId(), event.getId());

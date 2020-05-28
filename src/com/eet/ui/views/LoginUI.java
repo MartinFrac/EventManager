@@ -49,7 +49,7 @@ public class LoginUI extends JPanel {
 				User user = userController.authenticate(id, arrayPassword);
 				if (user!=null) {
 					JPanel jPanel = null;
-					switch (user.getRole()) {
+					switch (user.getRole().getLevel()) {
 						case 1: jPanel = new AdminUI();
 						break;
 						case 2: jPanel = new EventOrganiserUI();

@@ -2,8 +2,8 @@ package com.eet.ui.views;
 
 import com.eet.controllers.UserController;
 import com.eet.memory.ActiveUser;
-import com.eet.models.Event;
-import com.eet.models.Filters;
+import com.eet.models.Role;
+import com.eet.models.User;
 import com.eet.ui.BigFrame;
 import com.eet.ui.RendererAndEditor;
 import com.eet.ui.SmallFrame;
@@ -14,12 +14,12 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.HashMap;
-import java.util.Vector;
 
 public class SearchStudentsUI extends JPanel {
 
     private JButton goBackButton;
     private JLabel searchStudentsLabel;
+    private JButton privileged;
     private JTextField nameTextField;
     private JTextField surnameTextField;
     private JTextField idTextField;
@@ -28,6 +28,9 @@ public class SearchStudentsUI extends JPanel {
     private JButton filterButton;
     private JTable table;
     private DefaultTableModel model;
+    private RendererAndEditor rendererAndEditorBookings;
+    private RendererAndEditor rendererAndEditorGrant;
+    private RendererAndEditor rendererAndEditorRevoke;
 
     private UserController userController;
 
@@ -35,13 +38,15 @@ public class SearchStudentsUI extends JPanel {
             "Name",
             "Surname",
             "Role",
+            "Bookings",
+            "Privileges",
             "id"
     };
-    private static final int[] widths = {100, 120, 130, 150, 100, 150, 150, 0};
+    private static final int[] widths = {100, 170, 130, 150, 150, 200, 0};
 
-    private static final String ID = "ID";
-    private static final String NAME = "Name";
-    private static final String SURNAME = "Surname";
+    public static final String ID = "ID";
+    public static final String NAME = "Name";
+    public static final String SURNAME = "Surname";
 
     public JButton getGoBackButton() {
         return goBackButton;
@@ -58,7 +63,7 @@ public class SearchStudentsUI extends JPanel {
 
 
         filterButton = new JButton();
-        filterButton.setBounds(530, 460, 140, 85);
+        filterButton.setBounds(440, 500, 140, 85);
         filterButton.setBackground(new Color(214, 217, 223));
         filterButton.setForeground(new Color(0,0,0));
         filterButton.setEnabled(true);
@@ -73,27 +78,53 @@ public class SearchStudentsUI extends JPanel {
                     String id = idTextField.getText();
                     String name = nameTextField.getText();
                     String surname = surnameTextField.getText();
-                    String role = (String) roleJComboBox.getSelectedItem();
                     map.put("id", id);
                     map.put("name", name);
                     map.put("surname", surname);
-                    map.put("role", role);
-
-                    Filters filters = Utility.validateFilters(map);
-                    if (filters==null) {
-                        System.out.println("wrong filters");
+                    if (privileged.getText().equals("Privileged")) {
+                        map.put("role", Role.USER.toString());
                     } else {
-                        Object[][] date = userController.getUsersWithFilters(filters);
-                        Utility.updateData(data, columnNames.length, model);
+                        map.put("role", Role.EVENT_ORGANISER.toString());
                     }
+
+                    User user = Utility.validateUserFilters(map);
+                    Object[][] data = userController.getUsersWithFilters(user);
+                    Utility.updateData(data, columnNames.length, 2, model);
                 } catch (ClassCastException exception) {
                     System.out.println(exception.getMessage());
                 }
             }
         });
 
+        privileged = new JButton();
+        privileged.setBounds(380, 40, 180, 35);
+        privileged.setBackground(new Color(214, 217, 223));
+        privileged.setForeground(new Color(0, 0, 0));
+        privileged.setEnabled(true);
+        privileged.setFont(new Font("sansserif", 0, 12));
+        privileged.setText("Non Privileged");
+        privileged.setVisible(true);
+        privileged.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Object[][] data;
+                if ("Non Privileged".equals(privileged.getText())) {
+                    privileged.setText("Privileged");
+                    data = userController.getNonPrivileged();
+                    table.getColumnModel().getColumn(5).setCellRenderer(rendererAndEditorGrant);
+                    table.getColumnModel().getColumn(5).setCellEditor(rendererAndEditorGrant);
+                } else {
+                    privileged.setText("Non Privileged");
+                    data = userController.getPrivileged();
+                    table.getColumnModel().getColumn(5).setCellRenderer(rendererAndEditorRevoke);
+                    table.getColumnModel().getColumn(5).setCellEditor(rendererAndEditorRevoke);
+                }
+                Utility.updateData(data, columnNames.length, 2, model);
+            }
+        });
+
         goBackButton = new JButton();
-        goBackButton.setBounds(720,460,140,85);
+        goBackButton.setBounds(720,500,140,85);
         goBackButton.setBackground(new Color(214,217,223));
         goBackButton.setForeground(new Color(0,0,0));
         goBackButton.setEnabled(true);
@@ -104,7 +135,7 @@ public class SearchStudentsUI extends JPanel {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 JPanel jPanel = null;
-                switch (ActiveUser.getUser().getRole()) {
+                switch (ActiveUser.getUser().getRole().getLevel()) {
                     case 1: jPanel = new AdminUI();
                         break;
                     case 2: jPanel = new EventOrganiserUI();
@@ -142,12 +173,33 @@ public class SearchStudentsUI extends JPanel {
                 if (ID.equals(id)) {
                     id = "";
                 }
-                data = userController.getUsersById(id);
-                Utility.updateData(data, columnNames.length, model);
+                if (privileged.getText().equals("Privileged")) {
+                    data = userController.getNonPrivilegedById(id);
+                } else {
+                    data = userController.getPrivilegedById(id);
+                }
+                Utility.updateData(data, columnNames.length, 2, model);
             }
         });
 
-        nameTextField = Utility.textFieldGenerator(50,40,180,35, Filters.TITLE);
+        idTextField = Utility.textFieldGenerator(50,40,180,35, ID);
+        idTextField.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                if (ID.equals(idTextField.getText())) {
+                    idTextField.setText("");
+                }
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                if (idTextField.getText().equals("")) {
+                    idTextField.setText(ID);
+                }
+            }
+        });
+
+        nameTextField = Utility.textFieldGenerator(15,500,150,35, NAME);
         nameTextField.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {
@@ -164,76 +216,88 @@ public class SearchStudentsUI extends JPanel {
             }
         });
 
+        surnameTextField = Utility.textFieldGenerator(200,500,150,35, SURNAME);
+        surnameTextField.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                if (SURNAME.equals(surnameTextField.getText())) {
+                    surnameTextField.setText("");
+                }
+            }
 
-        Object[][] data = userController.getAll();
+            @Override
+            public void focusLost(FocusEvent e) {
+                if (surnameTextField.getText().equals("")) {
+                    surnameTextField.setText(SURNAME);
+                }
+            }
+        });
+
+
+        Object[][] data = userController.getPrivileged();
 
         table = new JTable();
         table.setRowHeight(40);
         model = new DefaultTableModel();
         model.setColumnIdentifiers(columnNames);
-        Utility.updateData(data, columnNames.length, model);
+        Utility.updateData(data, columnNames.length, 2, model);
         table.setModel(model);
         for (int i = 0; i<widths.length; i++) {
             table.getColumnModel().getColumn(i).setMinWidth(widths[i]);
             table.getColumnModel().getColumn(i).setMaxWidth(widths[i]);
         }
 
-        RendererAndEditor rendererAndEditorGrant = new RendererAndEditor("Grant Privileges");
+        rendererAndEditorGrant = new RendererAndEditor("Grant Privileges");
         ActionListener actionListenerGrant = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 DefaultTableModel tableModel = (DefaultTableModel) table.getModel();
-                int userId = (int) tableModel.getValueAt(rendererAndEditorGrant.getRow(), columnNames.length-1);
+                String userId = (String) tableModel.getValueAt(rendererAndEditorGrant.getRow(), columnNames.length-1);
                 tableModel.removeRow(rendererAndEditorGrant.getRow());
                 userController.grantPrivileges(userId);
             }
         };
         rendererAndEditorGrant.addActionListener(actionListenerGrant);
 
-        RendererAndEditor rendererAndEditorRevoke = new RendererAndEditor("Revoke Privileges");
+        rendererAndEditorRevoke = new RendererAndEditor("Revoke Privileges");
         ActionListener actionListenerRevoke = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                DefaultTableModel tableModel = (DefaultTableModel) table.getModel();
+                String userId = (String) tableModel.getValueAt(rendererAndEditorGrant.getRow(), columnNames.length-1);
+                tableModel.removeRow(rendererAndEditorGrant.getRow());
+                userController.revokePrivileges(userId);
             }
         };
         rendererAndEditorRevoke.addActionListener(actionListenerRevoke);
 
-        RendererAndEditor rendererAndEditorBookings = new RendererAndEditor("Bookings");
+        rendererAndEditorBookings = new RendererAndEditor("Bookings");
         ActionListener actionListenerBookings = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                DefaultTableModel tableModel = (DefaultTableModel) table.getModel();
+                String userId = (String) tableModel.getValueAt(rendererAndEditorGrant.getRow(), columnNames.length-1);
             }
         };
         rendererAndEditorBookings.addActionListener(actionListenerBookings);
 
-        table.getColumnModel().getColumn(5).setCellRenderer(rendererAndEditorGrant);
-        table.getColumnModel().getColumn(5).setCellEditor(rendererAndEditorGrant);
-        table.getColumnModel().getColumn(6).setCellRenderer(rendererAndEditorRevoke);
-        table.getColumnModel().getColumn(6).setCellEditor(rendererAndEditorRevoke);
-        table.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                if (table.getSelectedColumn() <4) {
-                    Vector row = model.getDataVector().elementAt(table.getSelectedRow());
-                    Event event = userController.getUser((Integer) row.get(columnNames.length-1));
-                    EventDetailsUI eventDetailsUI = new EventDetailsUI(event, isEditable);
-                    SmallFrame smallFrame = new SmallFrame(eventDetailsUI);
-                    smallFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-                }
-            }
-        });
+        table.getColumnModel().getColumn(4).setCellRenderer(rendererAndEditorBookings);
+        table.getColumnModel().getColumn(4).setCellEditor(rendererAndEditorBookings);
+        table.getColumnModel().getColumn(5).setCellRenderer(rendererAndEditorRevoke);
+        table.getColumnModel().getColumn(5).setCellEditor(rendererAndEditorRevoke);
 
         JScrollPane scrollPane = new JScrollPane(table);
-        scrollPane.setBounds(0, 100, 900, 330);
+        scrollPane.setBounds(0, 100, 900, 380);
 
         //adding components to contentPane panel
+        this.add(privileged);
+        this.add(idTextField);
         this.add(goBackButton);
         this.add(filterButton);
         this.add(searchButton);
         this.add(searchStudentsLabel);
         this.add(nameTextField);
+        this.add(surnameTextField);
         this.add(scrollPane);
     }
 }

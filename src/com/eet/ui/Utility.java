@@ -1,9 +1,13 @@
 package com.eet.ui;
 
 import com.eet.controllers.EventController;
+import com.eet.mappers.UserMapper;
 import com.eet.models.Event;
 import com.eet.models.Filters;
+import com.eet.models.Role;
+import com.eet.models.User;
 import com.eet.ui.views.CreateEventUI;
+import com.eet.ui.views.SearchStudentsUI;
 import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
@@ -50,10 +54,10 @@ public class Utility {
         return datePicker;
     }
 
-    public static void updateData(Object[][] data, int size, DefaultTableModel model) {
+    public static void updateData(Object[][] data, int size, int noOfButtons, DefaultTableModel model) {
         model.getDataVector().removeAllElements();
         if(data!=null) {
-            Object[][] formattedData = formatData(data, size);
+            Object[][] formattedData = formatData(data, size, noOfButtons);
             for(int i = 0; i < data.length; i++) {
                 model.addRow(formattedData[i]);
             }
@@ -61,14 +65,14 @@ public class Utility {
         model.fireTableDataChanged();
     }
 
-    public static Object[][] formatData(Object[][] data, int size) {
+    public static Object[][] formatData(Object[][] data, int size, int noOfButtons) {
         Object[][] formattedData = new Object[data.length][size];
         for (int j = 0; j < data.length; j++) {
             for (int i = 0; i < size; i++) {
-                if (i < 7) {
+                if (i < (size-noOfButtons-1)) {
                     formattedData[j][i] = data[j][i];
                 } else if (i == size-1) {
-                    formattedData[j][i] = data[j][7];
+                    formattedData[j][i] = data[j][i-noOfButtons];
                 }
                 else {
                     formattedData[j][i] = "";
@@ -92,7 +96,29 @@ public class Utility {
         return timestamp;
     }
 
-    public static User
+    public static User validateUserFilters(HashMap<String, String> map) {
+        String id = map.get("id");
+        String name = map.get("name");
+        String surname = map.get("surname");
+        String role = map.get("role");
+
+        if (SearchStudentsUI.ID.equals(id)) {
+            map.put("id", "");
+        }
+        if (SearchStudentsUI.NAME.equals(name)) {
+            map.put("name", "");
+        }
+        if (SearchStudentsUI.SURNAME.equals(surname)) {
+            map.put("surname", "");
+        }
+        if (role.equals(Role.USER.toString())) {
+            map.put("role", "3");
+        } else{
+            map.put("role", "2");
+        }
+        User user = UserMapper.fromUI(map);
+        return user;
+    }
 
     public static Filters validateFilters(HashMap<String, String> map, Date startDate, Date endDate) {
 

@@ -6,7 +6,7 @@ public class User {
     private String name;
     private String surname;
     private String password;
-    private int role;
+    private Role role;
 
     public User() {
     }
@@ -43,11 +43,11 @@ public class User {
         this.password = password;
     }
 
-    public int getRole() {
+    public Role getRole() {
         return role;
     }
 
-    public void setRole(int role) {
+    public void setRole(Role role) {
         this.role = role;
     }
 }

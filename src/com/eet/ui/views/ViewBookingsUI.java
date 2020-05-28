@@ -103,7 +103,7 @@ public class ViewBookingsUI extends JPanel {
 						} else {
 							data = eventController.getRepeatableBookingsWithFilters(ActiveUser.getUser().getId(), filters);
 						}
-						Utility.updateData(data, columnNames.length, model);
+						Utility.updateData(data, columnNames.length, 1, model);
 					}
 				} catch (ClassCastException exception) {
 					System.out.println(exception.getMessage());
@@ -123,7 +123,7 @@ public class ViewBookingsUI extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent actionEvent) {
 				JPanel jPanel = null;
-				switch (ActiveUser.getUser().getRole()) {
+				switch (ActiveUser.getUser().getRole().getLevel()) {
 					case 1: jPanel = new AdminUI();
 						break;
 					case 2: jPanel = new EventOrganiserUI();
@@ -167,7 +167,7 @@ public class ViewBookingsUI extends JPanel {
 				} else {
 					data = eventController.getRepeatableBookings(userId, name);
 				}
-				Utility.updateData(data, columnNames.length, model);
+				Utility.updateData(data, columnNames.length, 1,model);
 			}
 		});
 
@@ -182,11 +182,11 @@ public class ViewBookingsUI extends JPanel {
 		repeatableButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				Object[][] data;
 				if(repeatableButton.getText().equals("Repeatable Events")) {
-					Object[][] data = eventController.getRepeatableBookings(ActiveUser.getUser().getId());
+					data = eventController.getRepeatableBookings(ActiveUser.getUser().getId());
 					table.getColumnModel().getColumn(3).setHeaderValue("Repetition");
 					table.getTableHeader().repaint();
-					Utility.updateData(data, columnNames.length, model);
 					repeatableButton.setText("One time Events");
 					int[] widths = {150, 60, 110, 200, 60, 70, 150, 100, 0};
 					for (int i = 0; i<widths.length; i++) {
@@ -195,10 +195,9 @@ public class ViewBookingsUI extends JPanel {
 					}
 				}
 				else {
-					Object[][] data = eventController.getNonRepeatableBookings(ActiveUser.getUser().getId());
+					data = eventController.getNonRepeatableBookings(ActiveUser.getUser().getId());
 					table.getColumnModel().getColumn(3).setHeaderValue("Start Date");
 					table.getTableHeader().repaint();
-					Utility.updateData(data, columnNames.length, model);
 					repeatableButton.setText("Repeatable Events");
 					int[] widths = {150, 60, 190, 120, 60, 70, 150, 100, 0};
 					for (int i = 0; i<widths.length; i++) {
@@ -206,6 +205,7 @@ public class ViewBookingsUI extends JPanel {
 						table.getColumnModel().getColumn(i).setMaxWidth(widths[i]);
 					}
 				}
+				Utility.updateData(data, columnNames.length, 1, model);
 			}
 		});
 
@@ -283,7 +283,7 @@ public class ViewBookingsUI extends JPanel {
 		table.setRowHeight(40);
 		model = new DefaultTableModel();
 		model.setColumnIdentifiers(columnNames);
-		Utility.updateData(data, columnNames.length, model);
+		Utility.updateData(data, columnNames.length, 1, model);
 		table.setModel(model);
 		int[] widths = {150, 60, 190, 120, 60, 70, 150, 100, 0};
 		for (int i = 0; i<widths.length; i++) {
@@ -311,7 +311,7 @@ public class ViewBookingsUI extends JPanel {
 					Vector row = model.getDataVector().elementAt(table.getSelectedRow());
 					Event event = eventController.getEvent((Integer) row.get(8));
 					boolean isEditable = false;
-					if (ActiveUser.getUser().getRole()==1) {
+					if (ActiveUser.getUser().getRole().getLevel()==1) {
 						isEditable = true;
 					} else {
 						isEditable = eventOrganisingController.checkIfExists(ActiveUser.getUser().getId(), event.getId());

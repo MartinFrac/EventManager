@@ -579,7 +579,7 @@ public class EventDao {
                 "AND e.available_spaces >= (CASE WHEN :available_spaces = -1 THEN TRUE ELSE :available_spaces END) " +
                 "AND (CASE WHEN :keywords = '' THEN TRUE " +
                 "WHEN e.description_id IS NULL THEN FALSE " +
-                "ELSE e.description_id in (SELECT id FROM description WHERE description MATCH (SELECT var FROM variables)) END);";
+                "ELSE e.description_id in (SELECT id FROM description WHERE description MATCH (SELECT var FROM variables)) END);";  
 
         String insertKeywordsQuery = "INSERT INTO variables (var) VALUES (?)";
         String clearVariablesQuery = "DELETE FROM variables";

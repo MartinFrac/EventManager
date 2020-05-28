@@ -409,7 +409,7 @@ public class CreateEventUI extends JPanel {
                 if (map != null) {
                     eventController.create(map, ActiveUser.getUser().getId());
                     JPanel jPanel = null;
-                    switch (ActiveUser.getUser().getRole()) {
+                    switch (ActiveUser.getUser().getRole().getLevel()) {
                         case 1: jPanel = new AdminUI();
                             break;
                         case 2: jPanel = new EventOrganiserUI();
@@ -437,7 +437,7 @@ public class CreateEventUI extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 JPanel jPanel = null;
-                switch (ActiveUser.getUser().getRole()) {
+                switch (ActiveUser.getUser().getRole().getLevel()) {
                     case 1: jPanel = new AdminUI();
                         break;
                     case 2: jPanel = new EventOrganiserUI();

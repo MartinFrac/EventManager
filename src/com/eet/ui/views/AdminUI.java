@@ -51,6 +51,9 @@ public class AdminUI extends JPanel {
         searchStudentsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                SearchStudentsUI searchStudentsUI = new SearchStudentsUI();
+                SmallFrame.getjFrame().dispose();
+                new BigFrame(searchStudentsUI, searchStudentsUI.getGoBackButton());
             }
         });
 
