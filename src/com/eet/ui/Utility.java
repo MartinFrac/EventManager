@@ -271,6 +271,13 @@ public class Utility {
                     JOptionPane.WARNING_MESSAGE);
             return null;
         }
+        if (spacelimitInt>30) {
+            JOptionPane.showMessageDialog(new JFrame(),
+                    "Value in Space Limit cannot exceed 30",
+                    "Inane warning",
+                    JOptionPane.WARNING_MESSAGE);
+            return null;
+        }
         if (map.get("id") != null) {
             Event event = eventController.getEvent((int) map.get("id"));
             if (spacelimitInt < (event.getSpaceLimitations() - event.getAvailableSpaces())) {
