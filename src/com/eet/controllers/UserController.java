@@ -77,6 +77,31 @@ public class UserController {
         return castToArray(users);
     }
 
+    public Object[][] getPrivilegedByBookingEventId(int eventId) {
+        List<User> users = userDao.findPrivilegedByBookingEventId(eventId);
+        return castToArray(users);
+    }
+
+    public Object[][] getNonPrivilegedByBookingEventId(int eventId) {
+        List<User> users = userDao.findNonPrivilegedByBookingEventId(eventId);
+        return castToArray(users);
+    }
+
+    public Object[][] getPrivilegedByIdBookingEventId(String id, int eventId) {
+        List<User> users = userDao.findPrivilegedByIdAndBookingEventId(id, eventId);
+        return castToArray(users);
+    }
+
+    public Object[][] getNonPrivilegedByIdBookingEventId(String id, int eventId) {
+        List<User> users = userDao.findNonPrivilegedByIdAndBookingEventId(id, eventId);
+        return castToArray(users);
+    }
+
+    public Object[][] getByBookingEventIdWithFilters(User user, int eventId) {
+        List<User> users = userDao.findByBookingEventIdWithFilters(user, eventId);
+        return castToArray(users);
+    }
+
     private Object[][] castToArray(List<User> users) {
         Object[][] objects = new Object[users.size()][5];
         if (users.isEmpty()) {

@@ -311,9 +311,9 @@ public class AdminViewStudentBookings extends JPanel {
                     Vector row = model.getDataVector().elementAt(table.getSelectedRow());
                     Event event = eventController.getEvent((Integer) row.get(8));
                     boolean isEditable = true;
-                    EventDetailsUI eventDetailsUI = new EventDetailsUI(event, isEditable);
+                    EventDetailsUI eventDetailsUI = new EventDetailsUI(event, isEditable, AdminViewStudentBookings.this);
                     SmallFrame smallFrame = new SmallFrame(eventDetailsUI);
-                    smallFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+                    BigFrame.getjFrame().dispose();
                 }
             }
         });

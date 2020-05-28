@@ -56,7 +56,7 @@ public class EventDetailsUI extends JPanel {
         return updateButton;
     }
 
-    public EventDetailsUI(Event event, Boolean isEditable){
+    public EventDetailsUI(Event event, Boolean isEditable, JPanel backJPanel){
 
         eventController = new EventController();
 
@@ -448,6 +448,7 @@ public class EventDetailsUI extends JPanel {
             goBackButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
+                    new BigFrame(backJPanel);
                     SmallFrame.getjFrame().dispose();
                 }
             });
@@ -464,7 +465,8 @@ public class EventDetailsUI extends JPanel {
             viewBookingsButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-
+                    ViewEventBookings viewEventBookings = new ViewEventBookings(event.getId());
+                    new BigFrame(viewEventBookings, viewEventBookings.getGoBackButton());
                 }
             });
 
@@ -479,6 +481,7 @@ public class EventDetailsUI extends JPanel {
             cancelButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
+                    new BigFrame(backJPanel);
                     SmallFrame.getjFrame().dispose();
                 }
             });
@@ -489,7 +492,7 @@ public class EventDetailsUI extends JPanel {
             updateButton.setForeground(new Color(0, 0, 0));
             updateButton.setEnabled(true);
             updateButton.setFont(new Font("sansserif", 0, 12));
-            updateButton.setText("Create");
+            updateButton.setText("Update");
             updateButton.setVisible(true);
             updateButton.addActionListener(new ActionListener() {
                 @Override

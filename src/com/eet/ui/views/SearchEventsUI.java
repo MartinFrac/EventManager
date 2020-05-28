@@ -313,12 +313,12 @@ public class SearchEventsUI extends JPanel {
             public void mouseClicked(MouseEvent e) {
                 if (table.getSelectedColumn() != 7) {
                     Vector row = model.getDataVector().elementAt(table.getSelectedRow());
-                    Event event = eventController.getEvent((Integer) row.get(8));
+                    Event event = eventController.getEvent((Integer) row.get(columnNames.length-1));
                     boolean isEditable = false;
                     isEditable = eventOrganisingController.checkIfExists(ActiveUser.getUser().getId(), event.getId());
-                    EventDetailsUI eventDetailsUI = new EventDetailsUI(event, isEditable);
+                    EventDetailsUI eventDetailsUI = new EventDetailsUI(event, isEditable, SearchEventsUI.this);
                     SmallFrame smallFrame = new SmallFrame(eventDetailsUI);
-                    smallFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+                    BigFrame.getjFrame().dispose();
                 }
             }
         });

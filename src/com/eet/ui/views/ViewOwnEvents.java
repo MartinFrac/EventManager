@@ -315,9 +315,9 @@ public class ViewOwnEvents extends JPanel {
                     Vector row = model.getDataVector().elementAt(table.getSelectedRow());
                     Event event = eventController.getEvent((Integer) row.get(columnNames.length-1));
                     boolean isEditable = true;
-                    EventDetailsUI eventDetailsUI = new EventDetailsUI(event, isEditable);
+                    EventDetailsUI eventDetailsUI = new EventDetailsUI(event, isEditable, ViewOwnEvents.this);
                     SmallFrame smallFrame = new SmallFrame(eventDetailsUI);
-                    smallFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+                    BigFrame.getjFrame().dispose();
                 }
             }
         });

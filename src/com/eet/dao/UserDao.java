@@ -160,4 +160,112 @@ public class UserDao {
             e.printStackTrace();
         }
     }
+
+    public List<User> findPrivilegedByBookingEventId(int eventId) {
+        List<User> users = new ArrayList<>();
+        String query = "SELECT u.id, u.name, u.surname, u.role_id, u.password FROM USER AS u " +
+                "INNER JOIN BOOKING AS b on u.id = b.user_id WHERE u.role_id = 2 AND b.event_id = ?";
+        try (Connection connection = SqliteConnection.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setInt(1, eventId);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                users.add(UserMapper.fromSql(resultSet));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return users;
+    }
+
+    public List<User> findNonPrivilegedByBookingEventId(int eventId) {
+        List<User> users = new ArrayList<>();
+        String query = "SELECT u.id, u.name, u.surname, u.role_id, u.password FROM USER AS u " +
+                "INNER JOIN BOOKING AS b on u.id = b.user_id WHERE u.role_id = 3 AND b.event_id = ?";
+        try (Connection connection = SqliteConnection.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setInt(1, eventId);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                users.add(UserMapper.fromSql(resultSet));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return users;
+    }
+
+    public List<User> findPrivilegedByIdAndBookingEventId(String id, int eventId) {
+        List<User> users = new ArrayList<>();
+        String query = "SELECT u.id, u.name, u.surname, u.role_id, u.password FROM USER AS u " +
+                "INNER JOIN BOOKING AS b on u.id = b.user_id WHERE u.role_id = 2 AND b.event_id = ? " +
+                "AND u.id = ?";
+        try (Connection connection = SqliteConnection.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setInt(1, eventId);
+            preparedStatement.setString(2, id);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                users.add(UserMapper.fromSql(resultSet));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return users;
+    }
+
+    public List<User> findNonPrivilegedByIdAndBookingEventId(String id, int eventId) {
+        List<User> users = new ArrayList<>();
+        String query = "SELECT u.id, u.name, u.surname, u.role_id, u.password FROM USER AS u " +
+                "INNER JOIN BOOKING AS b on u.id = b.user_id WHERE u.role_id = 3 AND b.event_id = ? " +
+                "AND u.id = ?";
+        try (Connection connection = SqliteConnection.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setInt(1, eventId);
+            preparedStatement.setString(2, id);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                users.add(UserMapper.fromSql(resultSet));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return users;
+    }
+
+    public List<User> findByBookingEventIdWithFilters(User user, int eventId) {
+        List<User> users = new ArrayList<>();
+        String query = "SELECT u.id, u.name, u.surname, u.role_id, u.password FROM USER AS u " +
+                "INNER JOIN BOOKING AS b on u.id = b.user_id " +
+                "WHERE (CASE WHEN :id = '' THEN TRUE ELSE u.id = :id END) " +
+                "AND (CASE WHEN :name = '' THEN TRUE ELSE u.name LIKE '%'|| :name ||'%' END) " +
+                "AND (CASE WHEN :surname = '' THEN TRUE ELSE u.surname LIKE '%'|| :surname ||'%' END) " +
+                "AND (CASE WHEN :role_id = 0 THEN TRUE ELSE u.role_id = :role_id END) " +
+                "AND b.event_id = :event_id ;";
+
+        try (Connection connection = SqliteConnection.getConnection()) {
+            NamedParamStatement namedParamStatement = new NamedParamStatement(connection, query);
+            namedParamStatement.setString("id", user.getId());
+            namedParamStatement.setString("name", user.getName());
+            namedParamStatement.setString("surname", user.getSurname());
+            namedParamStatement.setInt("role_id", user.getRole().getLevel());
+            namedParamStatement.setInt("event_id", eventId);
+            ResultSet resultSet = namedParamStatement.executeQuery();
+
+            while (resultSet.next()) {
+                users.add(UserMapper.fromSql(resultSet));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return users;
+    }
 }

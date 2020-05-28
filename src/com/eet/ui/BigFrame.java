@@ -2,6 +2,8 @@ package com.eet.ui;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class BigFrame extends JFrame {
 
@@ -17,6 +19,13 @@ public class BigFrame extends JFrame {
         this.setVisible(true);
         this.setResizable(false);
         jFrame = this;
+        this.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                super.windowClosing(e);
+                jFrame = null;
+            }
+        });
     }
 
     public BigFrame(JPanel jPanel, Component component) {
@@ -30,6 +39,13 @@ public class BigFrame extends JFrame {
         this.setVisible(true);
         this.setResizable(false);
         jFrame = this;
+        this.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                super.windowClosing(e);
+                jFrame = null;
+            }
+        });
     }
 
     public static BigFrame getjFrame() {

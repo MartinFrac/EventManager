@@ -316,9 +316,9 @@ public class ViewBookingsUI extends JPanel {
 					} else {
 						isEditable = eventOrganisingController.checkIfExists(ActiveUser.getUser().getId(), event.getId());
 					}
-					EventDetailsUI eventDetailsUI = new EventDetailsUI(event, isEditable);
+					EventDetailsUI eventDetailsUI = new EventDetailsUI(event, isEditable, ViewBookingsUI.this);
 					SmallFrame smallFrame = new SmallFrame(eventDetailsUI);
-					smallFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+					BigFrame.getjFrame().dispose();
 				}
 			}
 		});
