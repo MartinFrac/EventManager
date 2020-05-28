@@ -47,6 +47,8 @@ public class SearchStudentsUI extends JPanel {
     public static final String ID = "ID";
     public static final String NAME = "Name";
     public static final String SURNAME = "Surname";
+    private static final String GET_PRIVILEGED = "Get Privileged";
+    private static final String GET_NON_PRIVILEGED = "Get Non Privileged";
 
     public JButton getGoBackButton() {
         return goBackButton;
@@ -81,7 +83,7 @@ public class SearchStudentsUI extends JPanel {
                     map.put("id", id);
                     map.put("name", name);
                     map.put("surname", surname);
-                    if (privileged.getText().equals("Privileged")) {
+                    if (privileged.getText().equals(GET_PRIVILEGED)) {
                         map.put("role", Role.USER.toString());
                     } else {
                         map.put("role", Role.EVENT_ORGANISER.toString());
@@ -102,19 +104,19 @@ public class SearchStudentsUI extends JPanel {
         privileged.setForeground(new Color(0, 0, 0));
         privileged.setEnabled(true);
         privileged.setFont(new Font("sansserif", 0, 12));
-        privileged.setText("Non Privileged");
+        privileged.setText(GET_NON_PRIVILEGED);
         privileged.setVisible(true);
         privileged.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Object[][] data;
-                if ("Non Privileged".equals(privileged.getText())) {
-                    privileged.setText("Privileged");
+                if (GET_NON_PRIVILEGED.equals(privileged.getText())) {
+                    privileged.setText(GET_PRIVILEGED);
                     data = userController.getNonPrivileged();
                     table.getColumnModel().getColumn(5).setCellRenderer(rendererAndEditorGrant);
                     table.getColumnModel().getColumn(5).setCellEditor(rendererAndEditorGrant);
                 } else {
-                    privileged.setText("Non Privileged");
+                    privileged.setText(GET_NON_PRIVILEGED);
                     data = userController.getPrivileged();
                     table.getColumnModel().getColumn(5).setCellRenderer(rendererAndEditorRevoke);
                     table.getColumnModel().getColumn(5).setCellEditor(rendererAndEditorRevoke);
@@ -173,7 +175,7 @@ public class SearchStudentsUI extends JPanel {
                 if (ID.equals(id)) {
                     id = "";
                 }
-                if (privileged.getText().equals("Privileged")) {
+                if (privileged.getText().equals(GET_PRIVILEGED)) {
                     data = userController.getNonPrivilegedById(id);
                 } else {
                     data = userController.getPrivilegedById(id);
@@ -264,8 +266,8 @@ public class SearchStudentsUI extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 DefaultTableModel tableModel = (DefaultTableModel) table.getModel();
-                String userId = (String) tableModel.getValueAt(rendererAndEditorGrant.getRow(), columnNames.length-1);
-                tableModel.removeRow(rendererAndEditorGrant.getRow());
+                String userId = (String) tableModel.getValueAt(rendererAndEditorRevoke.getRow(), columnNames.length-1);
+                tableModel.removeRow(rendererAndEditorRevoke.getRow());
                 userController.revokePrivileges(userId);
             }
         };
@@ -276,7 +278,9 @@ public class SearchStudentsUI extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 DefaultTableModel tableModel = (DefaultTableModel) table.getModel();
-                String userId = (String) tableModel.getValueAt(rendererAndEditorGrant.getRow(), columnNames.length-1);
+                String userId = (String) tableModel.getValueAt(rendererAndEditorBookings.getRow(), columnNames.length-1);
+                AdminViewStudentBookings adminViewStudentBookings = new AdminViewStudentBookings(userId);
+                BigFrame.getjFrame().changePanel(adminViewStudentBookings);
             }
         };
         rendererAndEditorBookings.addActionListener(actionListenerBookings);
