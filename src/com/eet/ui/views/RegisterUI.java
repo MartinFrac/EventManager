@@ -19,6 +19,7 @@ public class RegisterUI extends JPanel {
 
     private JTextField idTextField;
     private JButton confirmButton;
+    private JButton goBack;
     private JTextField nameTextField;
     private JPasswordField passwordField1;
     private JPasswordField passwordField2;
@@ -198,6 +199,22 @@ public class RegisterUI extends JPanel {
             }
         });
 
+        goBack = new JButton();
+        goBack.setBounds(140,420,120,35);
+        goBack.setBackground(new Color(214,72,105));
+        goBack.setForeground(new Color(51,255,255));
+        goBack.setEnabled(true);
+        goBack.setFont(new Font("SansSerif",0,20));
+        goBack.setText("Go Back");
+        goBack.setVisible(true);
+        goBack.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                LoginUI loginUI = new LoginUI();
+                SmallFrame.getjFrame().changePanel(loginUI);
+            }
+        });
+
         //adding components to contentPane panel
         this.add(idTextField);
         this.add(confirmButton);
@@ -205,6 +222,7 @@ public class RegisterUI extends JPanel {
         this.add(passwordField1);
         this.add(passwordField2);
         this.add(surnameTextField);
+        this.add(goBack);
     }
 
     private boolean checkData(Map<String, String> map) {
