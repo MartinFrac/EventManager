@@ -136,7 +136,7 @@ public class SearchEventsUI extends JPanel {
                     case 3: jPanel = new StudentUI();
                         break;
                 }
-                new SmallFrame(jPanel);
+
                 BigFrame.getjFrame().dispose();
             }
         });
@@ -317,7 +317,7 @@ public class SearchEventsUI extends JPanel {
                     boolean isEditable = false;
                     isEditable = eventOrganisingController.checkIfExists(ActiveUser.getUser().getId(), event.getId());
                     EventDetailsUI eventDetailsUI = new EventDetailsUI(event, isEditable, SearchEventsUI.this);
-                    SmallFrame smallFrame = new SmallFrame(eventDetailsUI);
+//                    DesignatedFrame smallFrame = new DesignatedFrame(eventDetailsUI);
                     BigFrame.getjFrame().dispose();
                 }
             }

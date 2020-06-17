@@ -2,7 +2,7 @@ package com.eet.ui.views;
 
 import com.eet.memory.ActiveUser;
 import com.eet.ui.BigFrame;
-import com.eet.ui.SmallFrame;
+import com.eet.ui.DesignatedFrame;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -38,7 +38,7 @@ public class StudentUI extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 SearchEventsUI searchEventsUI = new SearchEventsUI();
-                SmallFrame.getjFrame().dispose();
+//                DesignatedFrame.getJFrame().dispose();
                 new BigFrame(searchEventsUI, searchEventsUI.getGoBackButton());
             }
         });
@@ -55,7 +55,7 @@ public class StudentUI extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 ViewBookingsUI viewBookingsUI = new ViewBookingsUI();
-                SmallFrame.getjFrame().dispose();
+//                DesignatedFrame.getJFrame().dispose();
                 new BigFrame(viewBookingsUI, viewBookingsUI.getGoBackButton());
             }
         });
@@ -72,7 +72,7 @@ public class StudentUI extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 LoginUI loginUI = new LoginUI();
-                SmallFrame.getjFrame().changePanel(loginUI);
+//                DesignatedFrame.getJFrame().changePanel(loginUI);
                 ActiveUser.setUser(null);
             }
         });

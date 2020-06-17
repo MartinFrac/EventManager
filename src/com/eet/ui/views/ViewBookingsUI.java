@@ -132,7 +132,7 @@ public class ViewBookingsUI extends JPanel {
 						break;
 				}
 				BigFrame.getjFrame().dispose();
-				new SmallFrame(jPanel);
+//				new DesignatedFrame(jPanel);
 			}
 		});
 
@@ -317,7 +317,7 @@ public class ViewBookingsUI extends JPanel {
 						isEditable = eventOrganisingController.checkIfExists(ActiveUser.getUser().getId(), event.getId());
 					}
 					EventDetailsUI eventDetailsUI = new EventDetailsUI(event, isEditable, ViewBookingsUI.this);
-					SmallFrame smallFrame = new SmallFrame(eventDetailsUI);
+//					DesignatedFrame smallFrame = new DesignatedFrame(eventDetailsUI);
 					BigFrame.getjFrame().dispose();
 				}
 			}

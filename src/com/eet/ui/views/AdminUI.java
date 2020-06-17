@@ -2,7 +2,7 @@ package com.eet.ui.views;
 
 import com.eet.memory.ActiveUser;
 import com.eet.ui.BigFrame;
-import com.eet.ui.SmallFrame;
+import com.eet.ui.DesignatedFrame;
 
 import javax.swing.*;
 import java.awt.*;
@@ -40,7 +40,7 @@ public class AdminUI extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 AdminSearchEvents adminSearchEvents = new AdminSearchEvents();
-                SmallFrame.getjFrame().dispose();
+//                DesignatedFrame.getJFrame().dispose();
                 new BigFrame(adminSearchEvents, adminSearchEvents.getGoBackButton());
             }
         });
@@ -57,7 +57,7 @@ public class AdminUI extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 ViewBookingsUI viewBookingsUI = new ViewBookingsUI();
-                SmallFrame.getjFrame().dispose();
+//                DesignatedFrame.getJFrame().dispose();
                 new BigFrame(viewBookingsUI, viewBookingsUI.getGoBackButton());
             }
         });
@@ -74,7 +74,7 @@ public class AdminUI extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 CreateEventUI createEventUI = new CreateEventUI();
-                SmallFrame.getjFrame().changePanel(createEventUI);
+//                DesignatedFrame.getJFrame().changePanel(createEventUI);
             }
         });
 
@@ -90,7 +90,7 @@ public class AdminUI extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 ViewOwnEvents viewOwnEvents = new ViewOwnEvents();
-                SmallFrame.getjFrame().dispose();
+//                DesignatedFrame.getJFrame().dispose();
                 new BigFrame(viewOwnEvents, viewOwnEvents.getGoBackButton());
             }
         });
@@ -107,7 +107,7 @@ public class AdminUI extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 AdminSearchStudentsUI adminSearchStudentsUI = new AdminSearchStudentsUI();
-                SmallFrame.getjFrame().dispose();
+//                DesignatedFrame.getJFrame().dispose();
                 new BigFrame(adminSearchStudentsUI, adminSearchStudentsUI.getGoBackButton());
             }
         });
@@ -124,7 +124,7 @@ public class AdminUI extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 LoginUI loginUI = new LoginUI();
-                SmallFrame.getjFrame().changePanel(loginUI);
+//                DesignatedFrame.getJFrame().changePanel(loginUI);
                 ActiveUser.setUser(null);
             }
         });

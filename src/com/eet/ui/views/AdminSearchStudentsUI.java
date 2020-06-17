@@ -6,7 +6,7 @@ import com.eet.models.Role;
 import com.eet.models.User;
 import com.eet.ui.BigFrame;
 import com.eet.ui.RendererAndEditor;
-import com.eet.ui.SmallFrame;
+import com.eet.ui.DesignatedFrame;
 import com.eet.ui.Utility;
 
 import javax.swing.*;
@@ -146,7 +146,7 @@ public class AdminSearchStudentsUI extends JPanel {
                         break;
                 }
                 BigFrame.getjFrame().dispose();
-                new SmallFrame(jPanel);
+//                new DesignatedFrame(jPanel);
             }
         });
 

@@ -7,7 +7,7 @@ import com.eet.models.Event;
 import com.eet.models.Filters;
 import com.eet.ui.BigFrame;
 import com.eet.ui.RendererAndEditor;
-import com.eet.ui.SmallFrame;
+import com.eet.ui.DesignatedFrame;
 import com.eet.ui.Utility;
 import org.jdatepicker.impl.JDatePickerImpl;
 
@@ -312,7 +312,7 @@ public class AdminViewStudentBookings extends JPanel {
                     Event event = eventController.getEvent((Integer) row.get(8));
                     boolean isEditable = true;
                     EventDetailsUI eventDetailsUI = new EventDetailsUI(event, isEditable, AdminViewStudentBookings.this);
-                    SmallFrame smallFrame = new SmallFrame(eventDetailsUI);
+//                    DesignatedFrame smallFrame = new DesignatedFrame(eventDetailsUI);
                     BigFrame.getjFrame().dispose();
                 }
             }

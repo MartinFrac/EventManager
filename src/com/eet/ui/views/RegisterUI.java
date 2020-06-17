@@ -2,7 +2,9 @@ package com.eet.ui.views;
 
 import com.eet.controllers.UserController;
 import com.eet.models.User;
-import com.eet.ui.SmallFrame;
+import com.eet.ui.DesignatedFrame;
+import com.eet.ui.Frame;
+import com.eet.ui.Frames;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -192,7 +194,7 @@ public class RegisterUI extends JPanel {
                     user.setPassword(map.get("password1"));
                     userController.create(user);
                     LoginUI loginUI = new LoginUI();
-                    SmallFrame.getjFrame().changePanel(loginUI);
+                    Frames.getJFrame(Frame.Small).changePanel(loginUI);
                     JOptionPane.showMessageDialog(new JFrame(),
                             "Account created");
                 }
@@ -211,7 +213,7 @@ public class RegisterUI extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 LoginUI loginUI = new LoginUI();
-                SmallFrame.getjFrame().changePanel(loginUI);
+                Frames.getJFrame(Frame.Small).changePanel(loginUI);
             }
         });
 

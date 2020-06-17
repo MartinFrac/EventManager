@@ -7,7 +7,7 @@ import com.eet.models.Event;
 import com.eet.models.Filters;
 import com.eet.ui.BigFrame;
 import com.eet.ui.RendererAndEditor;
-import com.eet.ui.SmallFrame;
+import com.eet.ui.DesignatedFrame;
 import com.eet.ui.Utility;
 import org.jdatepicker.impl.JDatePickerImpl;
 
@@ -138,7 +138,7 @@ public class ViewOwnEvents extends JPanel {
                         break;
                 }
                 BigFrame.getjFrame().dispose();
-                new SmallFrame(jPanel);
+//                new DesignatedFrame(jPanel);
             }
         });
 
@@ -316,7 +316,7 @@ public class ViewOwnEvents extends JPanel {
                     Event event = eventController.getEvent((Integer) row.get(columnNames.length-1));
                     boolean isEditable = true;
                     EventDetailsUI eventDetailsUI = new EventDetailsUI(event, isEditable, ViewOwnEvents.this);
-                    SmallFrame smallFrame = new SmallFrame(eventDetailsUI);
+//                    DesignatedFrame smallFrame = new DesignatedFrame(eventDetailsUI);
                     BigFrame.getjFrame().dispose();
                 }
             }

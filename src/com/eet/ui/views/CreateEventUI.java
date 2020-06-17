@@ -2,7 +2,7 @@ package com.eet.ui.views;
 
 import com.eet.controllers.EventController;
 import com.eet.memory.ActiveUser;
-import com.eet.ui.SmallFrame;
+import com.eet.ui.DesignatedFrame;
 import com.eet.ui.Utility;
 import org.jdatepicker.impl.JDatePickerImpl;
 
@@ -417,7 +417,7 @@ public class CreateEventUI extends JPanel {
                         case 3: jPanel = new StudentUI();
                             break;
                     }
-                    SmallFrame.getjFrame().changePanel(jPanel);
+//                    DesignatedFrame.getJFrame().changePanel(jPanel);
                     JOptionPane.showMessageDialog(new JFrame(),
                             "Event created"
                     );
@@ -445,7 +445,7 @@ public class CreateEventUI extends JPanel {
                     case 3: jPanel = new StudentUI();
                         break;
                 }
-                SmallFrame.getjFrame().changePanel(jPanel);
+//                DesignatedFrame.getJFrame().changePanel(jPanel);
             }
         });
 

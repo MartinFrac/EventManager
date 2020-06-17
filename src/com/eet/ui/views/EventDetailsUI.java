@@ -1,17 +1,14 @@
 package com.eet.ui.views;
 
 import com.eet.controllers.EventController;
-import com.eet.memory.ActiveUser;
 import com.eet.models.Event;
 import com.eet.models.Type;
 import com.eet.ui.BigFrame;
-import com.eet.ui.SmallFrame;
+import com.eet.ui.DesignatedFrame;
 import com.eet.ui.Utility;
 import org.jdatepicker.impl.JDatePickerImpl;
 
 import javax.swing.*;
-import javax.swing.plaf.metal.MetalButtonUI;
-import javax.swing.plaf.metal.MetalTextFieldUI;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -449,7 +446,7 @@ public class EventDetailsUI extends JPanel {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     new BigFrame(backJPanel);
-                    SmallFrame.getjFrame().dispose();
+//                    DesignatedFrame.getJFrame().dispose();
                 }
             });
         } else {
@@ -482,7 +479,7 @@ public class EventDetailsUI extends JPanel {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     new BigFrame(backJPanel);
-                    SmallFrame.getjFrame().dispose();
+//                    DesignatedFrame.getJFrame().dispose();
                 }
             });
 
@@ -517,7 +514,7 @@ public class EventDetailsUI extends JPanel {
                     map = Utility.validateEventData(map, eventController);
                     if (map != null) {
                         eventController.update(map);
-                        SmallFrame.getjFrame().dispose();
+//                        DesignatedFrame.getJFrame().dispose();
                         JOptionPane.showMessageDialog(new JFrame(),
                                 "Event Updated"
                         );

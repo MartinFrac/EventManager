@@ -2,8 +2,8 @@ package com.eet.ui.views;
 
 import com.eet.controllers.UserController;
 import com.eet.models.User;
-import com.eet.ui.BigFrame;
-import com.eet.ui.SmallFrame;
+import com.eet.ui.*;
+import com.eet.ui.Frame;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -18,8 +18,15 @@ public class LoginUI extends JPanel {
 	private JPasswordField password;
 	private JButton register;
 	private JTextField studentId;
-	private final char[] passwordArray = new char[]{'P','a','s','s','w','o','r','d'};
 	private UserController userController;
+
+	public static final String STUDENT_ID = "Student ID";
+	public static final String PASSWORD = "Password";
+	public static final char[] PASSWORD_ARRAY = new char[]{'P','a','s','s','w','o','r','d'};
+
+	private static final Color buttonBackground = new Color(214,72,105);
+	private static final Color buttonForeground = new Color(51,255,255);
+	private static final Font buttonFont = new Font("SansSerif",0,20);
 
 	public JButton getLoginButton() {
 		return loginButton;
@@ -33,39 +40,25 @@ public class LoginUI extends JPanel {
 		this.setPreferredSize(new Dimension(400,500));
 		this.setBackground(new Color(139,217,169));
 
-		loginButton = new JButton();
-		loginButton.setBounds(150,300,100,35);
-		loginButton.setBackground(new Color(214,72,105));
-		loginButton.setForeground(new Color(51,255,255));
-		loginButton.setEnabled(true);
-		loginButton.setFont(new Font("SansSerif",0,20));
-		loginButton.setText("Login");
-		loginButton.setVisible(true);
-		loginButton.addActionListener(new ActionListener() {
+		ActionListener loginActionListener = new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				char[] arrayPassword = password.getPassword();
 				String id = studentId.getText();
-				User user = userController.authenticate(id, arrayPassword);
-				if (user!=null) {
-					JPanel jPanel = null;
-					switch (user.getRole().getLevel()) {
-						case 1: jPanel = new AdminUI();
-						break;
-						case 2: jPanel = new EventOrganiserUI();
-						break;
-						case 3: jPanel = new StudentUI();
-						break;
-					}
-					SmallFrame.getjFrame().changePanel(jPanel);
-				} else {
-					JOptionPane.showMessageDialog(new JFrame(),
-							"Wrong credentials",
-							"Inane warning",
-							JOptionPane.WARNING_MESSAGE);
+				User user = Utility.validateAuthorisation(id, arrayPassword, userController);
+				if (user != null) {
+					Utility.changeToUsersView(user.getRole());
 				}
 			}
-		});
+		};
+
+		loginButton = new ButtonBuilder("Login")
+				.withBounds(100, 35, 150, 300)
+				.withBackground(buttonBackground)
+				.withForeground(buttonForeground)
+				.withFont(buttonFont)
+				.withActionListener(loginActionListener)
+				.build();
 
 		noAccount = new JLabel();
 		noAccount.setBounds(150,370,100,35);
@@ -83,7 +76,7 @@ public class LoginUI extends JPanel {
 		password.setForeground(new Color(0,0,0));
 		password.setEnabled(true);
 		password.setFont(new Font("sansserif",0,12));
-		password.setText("Password");
+		password.setText(PASSWORD);
 		password.setEchoChar((char)0);
 		password.setVisible(true);
 		password.addFocusListener(
@@ -91,7 +84,7 @@ public class LoginUI extends JPanel {
 					@Override
 					public void focusGained(FocusEvent e) {
 						char[] inputArray = password.getPassword();
-						if(Arrays.equals(inputArray, passwordArray)) {
+						if(Arrays.equals(inputArray, PASSWORD_ARRAY)) {
 							password.setText("");
 							password.setEchoChar('*');
 						}
@@ -103,7 +96,7 @@ public class LoginUI extends JPanel {
 						char[] emptyArray = new char[0];
 						if(Arrays.equals(inputArray, emptyArray)) {
 							password.setEchoChar((char)0);
-							password.setText("Password");
+							password.setText(PASSWORD);
 						}
 					}
 				}
@@ -121,7 +114,7 @@ public class LoginUI extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				RegisterUI registerUI = new RegisterUI();
-				SmallFrame.getjFrame().changePanel(registerUI);
+				Frames.getJFrame(Frame.Small).changePanel(registerUI);
 			}
 		});
 
@@ -131,17 +124,21 @@ public class LoginUI extends JPanel {
 		studentId.setForeground(new Color(0,0,0));
 		studentId.setEnabled(true);
 		studentId.setFont(new Font("sansserif",0,12));
-		studentId.setText("Student ID");
+		studentId.setText(STUDENT_ID);
 		studentId.setVisible(true);
 		studentId.addFocusListener(new FocusListener() {
 			@Override
 			public void focusGained(FocusEvent e) {
-				placeholderDisappear(e);
+				if (studentId.getText().equals(STUDENT_ID)) {
+					studentId.setText("");
+				}
 			}
 
 			@Override
 			public void focusLost(FocusEvent e) {
-				placeholderAppear(e);
+				if (studentId.getText().equals("")) {
+					studentId.setText(STUDENT_ID);
+				}
 			}
 		});
 
@@ -151,17 +148,5 @@ public class LoginUI extends JPanel {
 		this.add(password);
 		this.add(register);
 		this.add(studentId);
-	}
-
-	private void placeholderDisappear(AWTEvent event) {
-		if (studentId.getText().equals("Student ID")) {
-			studentId.setText("");
-		}
-	}
-
-	private void placeholderAppear(AWTEvent event) {
-		if (studentId.getText().equals("")) {
-			studentId.setText("Student ID");
-		}
 	}
 }

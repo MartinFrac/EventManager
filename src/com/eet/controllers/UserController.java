@@ -3,12 +3,9 @@ package com.eet.controllers;
 import com.eet.dao.UserDao;
 import com.eet.mappers.UserMapper;
 import com.eet.memory.ActiveUser;
-import com.eet.models.Event;
 import com.eet.models.Role;
 import com.eet.models.User;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class UserController {

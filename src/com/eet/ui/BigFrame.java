@@ -8,10 +8,12 @@ import java.awt.event.WindowEvent;
 public class BigFrame extends JFrame {
 
     private static BigFrame jFrame;
+    private static final int WIDTH = 900;
+    private static final int HEIGHT = 600;
 
     public BigFrame(JPanel jPanel) {
         this.setTitle("GUI_project");
-        this.setSize(900,600);
+        this.setSize(WIDTH,HEIGHT);
         this.getContentPane().add(jPanel);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setLocationRelativeTo(null);

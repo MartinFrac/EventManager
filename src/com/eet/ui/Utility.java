@@ -1,13 +1,13 @@
 package com.eet.ui;
 
 import com.eet.controllers.EventController;
+import com.eet.controllers.UserController;
 import com.eet.mappers.UserMapper;
 import com.eet.models.Event;
 import com.eet.models.Filters;
 import com.eet.models.Role;
 import com.eet.models.User;
-import com.eet.ui.views.CreateEventUI;
-import com.eet.ui.views.AdminSearchStudentsUI;
+import com.eet.ui.views.*;
 import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
@@ -17,10 +17,7 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.sql.Timestamp;
 import java.time.LocalDate;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Properties;
+import java.util.*;
 
 public class Utility {
 
@@ -324,4 +321,48 @@ public class Utility {
 
         return map;
     }
+
+    public static User validateAuthorisation(String id, char[] password, UserController userController) {
+        if (LoginUI.STUDENT_ID.equals(id)) {
+            JOptionPane.showMessageDialog(new JFrame(),
+                    "Student ID cannot be empty",
+                    "Inane warning",
+                    JOptionPane.WARNING_MESSAGE);
+            return null;
+        }
+        if (Arrays.equals(LoginUI.PASSWORD_ARRAY, password)) {
+            JOptionPane.showMessageDialog(new JFrame(),
+                    "Password cannot be empty",
+                    "Inane warning",
+                    JOptionPane.WARNING_MESSAGE);
+            return null;
+        }
+        User user = userController.authenticate(id, password);
+        if (user == null) {
+            JOptionPane.showMessageDialog(new JFrame(),
+                    "Wrong credentials",
+                    "Inane warning",
+                    JOptionPane.WARNING_MESSAGE);
+            return null;
+        }
+        return user;
+    }
+
+    public static void changeToUsersView(Role role) {
+        JPanel jPanel = null;
+            switch (role.getLevel()) {
+                case 1:
+                    jPanel = new AdminUI();
+                    break;
+                case 2:
+                    jPanel = new EventOrganiserUI();
+                    break;
+                case 3:
+                    jPanel = new StudentUI();
+                    break;
+            }
+            Frames.getJFrame(Frame.Small).changePanel(jPanel);
+            JOptionPane.showMessageDialog(new JFrame(),
+                    "Successfully logged in");
+        }
 }

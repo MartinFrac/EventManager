@@ -8,7 +8,7 @@ import com.eet.models.Event;
 import com.eet.models.Filters;
 import com.eet.ui.BigFrame;
 import com.eet.ui.RendererAndEditor;
-import com.eet.ui.SmallFrame;
+import com.eet.ui.DesignatedFrame;
 import com.eet.ui.Utility;
 import org.jdatepicker.impl.JDatePickerImpl;
 
@@ -141,7 +141,7 @@ public class AdminSearchEvents extends JPanel {
                     case 3: jPanel = new StudentUI();
                         break;
                 }
-                new SmallFrame(jPanel);
+//                new DesignatedFrame(jPanel);
                 BigFrame.getjFrame().dispose();
             }
         });
@@ -334,7 +334,7 @@ public class AdminSearchEvents extends JPanel {
                     Event event = eventController.getEvent((Integer) row.get(columnNames.length-1));
                     boolean isEditable = true;
                     EventDetailsUI eventDetailsUI = new EventDetailsUI(event, isEditable, AdminSearchEvents.this);
-                    SmallFrame smallFrame = new SmallFrame(eventDetailsUI);
+//                    DesignatedFrame smallFrame = new DesignatedFrame(eventDetailsUI);
                     BigFrame.getjFrame().dispose();
                 }
             }
