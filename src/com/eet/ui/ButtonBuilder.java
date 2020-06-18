@@ -5,11 +5,10 @@ import java.awt.event.ActionListener;
 
 public class ButtonBuilder extends AbstractBuilder<ButtonBuilder, JButton> {
 
-    private String text;
     private ActionListener actionListener;
 
     public ButtonBuilder(String text) {
-        this.text = text;
+        super(text);
     }
 
     public ButtonBuilder withActionListener(ActionListener actionListener) {

@@ -27,8 +27,13 @@ public class DesignatedFrame extends JFrame {
         this.getContentPane().removeAll();
         this.getContentPane().add(panel);
         this.pack();
-        component.requestFocusInWindow();
         this.revalidate();
         this.repaint();
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                component.requestFocusInWindow();
+            }
+        });
     }
 }

@@ -40,34 +40,29 @@ public class LoginUI extends JPanel {
 		this.setPreferredSize(new Dimension(400,500));
 		this.setBackground(new Color(139,217,169));
 
-		ActionListener loginActionListener = new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				char[] arrayPassword = password.getPassword();
-				String id = studentId.getText();
-				User user = Utility.validateAuthorisation(id, arrayPassword, userController);
-				if (user != null) {
-					Utility.changeToUsersView(user.getRole());
-				}
+		ActionListener loginActionListener = e -> {
+			char[] arrayPassword = password.getPassword();
+			String id = studentId.getText();
+			User user = Utility.validateAuthorisation(id, arrayPassword, userController);
+			if (user != null) {
+				Utility.changeToUsersView(user.getRole());
 			}
 		};
 
 		loginButton = new ButtonBuilder("Login")
-				.withBounds(100, 35, 150, 300)
+				.withBounds(150, 300, 100, 35)
 				.withBackground(buttonBackground)
 				.withForeground(buttonForeground)
 				.withFont(buttonFont)
 				.withActionListener(loginActionListener)
 				.build();
 
-		noAccount = new JLabel();
-		noAccount.setBounds(150,370,100,35);
-		noAccount.setBackground(new Color(214,217,223));
-		noAccount.setForeground(new Color(0,0,0));
-		noAccount.setEnabled(true);
-		noAccount.setFont(new Font("SansSerif",0,12));
-		noAccount.setText("No account?");
-		noAccount.setVisible(true);
+		noAccount = new LabelBuilder("No account?")
+				.withBounds(150, 370, 100, 35)
+				.withBackground(new Color(214,217,223))
+				.withForeground(new Color(0,0,0))
+				.withFont(new Font("SansSerif",0,12))
+				.build();
 		noAccount.setHorizontalAlignment(SwingConstants.CENTER);
 
 		password = new JPasswordField();
@@ -102,45 +97,42 @@ public class LoginUI extends JPanel {
 				}
 		);
 
-		register = new JButton();
-		register.setBounds(150,400,100,30);
-		register.setBackground(new Color(204, 92, 189));
-		register.setForeground(new Color(0,0,0));
-		register.setEnabled(true);
-		register.setFont(new Font("SansSerif",0,10));
-		register.setText("Register");
-		register.setVisible(true);
-		register.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				RegisterUI registerUI = new RegisterUI();
-				Frames.getJFrame(Frame.Small).changePanel(registerUI);
-			}
-		});
+		ActionListener registerActionListener = e -> {
+			RegisterUI registerUI = new RegisterUI();
+			Frames.getJFrame(Frame.Small).changePanel(registerUI);
+		};
 
-		studentId = new JTextField();
-		studentId.setBounds(100,100,200,35);
-		studentId.setBackground(new Color(255,255,255));
-		studentId.setForeground(new Color(0,0,0));
-		studentId.setEnabled(true);
-		studentId.setFont(new Font("sansserif",0,12));
-		studentId.setText(STUDENT_ID);
-		studentId.setVisible(true);
-		studentId.addFocusListener(new FocusListener() {
-			@Override
-			public void focusGained(FocusEvent e) {
-				if (studentId.getText().equals(STUDENT_ID)) {
-					studentId.setText("");
-				}
-			}
+		register = new ButtonBuilder("Register")
+				.withBounds(150, 400, 100, 30)
+				.withBackground(new Color(204, 92, 189))
+				.withForeground(new Color(0,0,0))
+				.withFont(new Font("SansSerif",0,10))
+				.withActionListener(registerActionListener)
+				.build();
 
-			@Override
-			public void focusLost(FocusEvent e) {
-				if (studentId.getText().equals("")) {
-					studentId.setText(STUDENT_ID);
+		FocusListener studentIdFocusListener = new FocusListener() {
+				@Override
+				public void focusGained(FocusEvent e) {
+					if (studentId.getText().equals(STUDENT_ID)) {
+						studentId.setText("");
+					}
 				}
-			}
-		});
+
+				@Override
+				public void focusLost(FocusEvent e) {
+					if (studentId.getText().equals("")) {
+						studentId.setText(STUDENT_ID);
+					}
+				}
+			};
+
+		studentId = new TextFieldBuilder(STUDENT_ID)
+				.withBounds(100,100, 200, 35)
+				.withBackground(new Color(255,255,255))
+				.withForeground(new Color(0,0,0))
+				.withFont(new Font("sansserif",0,12))
+				.build();
+		studentId.addFocusListener(studentIdFocusListener);
 
 		//adding components to contentPane panel
 		this.add(loginButton);
