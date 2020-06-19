@@ -15,6 +15,8 @@ import org.jdatepicker.impl.UtilDateModel;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.*;
@@ -93,6 +95,57 @@ public class Utility {
         return timestamp;
     }
 
+    public static boolean validateRegister(Map<String, String> map, UserController userController) {
+        if (RegisterUI.NAME.equals(map.get("name"))) {
+            map.put("name", "");
+        }
+        if (RegisterUI.SURNAME.equals(map.get("surname"))) {
+            map.put("surname", "");
+        }
+        if (RegisterUI.ID.equals(map.get("id"))) {
+            map.put("id", "");
+        }
+        String password1 = new String(RegisterUI.PASSWORD_ARRAY_1);
+        if (password1.equals(map.get("password1"))) {
+            map.put("password1", "");
+        }
+        String password2 = new String(RegisterUI.PASSWORD_ARRAY_2);
+        if (password2.equals(map.get("password2"))) {
+            map.put("password2", "");
+        }
+        for (String key: map.keySet()) {
+            if ((map.get(key).length()>=50) || (map.get(key).length()==0)) {
+                JOptionPane.showMessageDialog(new JFrame(),
+                        "length of the value in: " + key + " should be between 0 and 50 characters",
+                        "Inane warning",
+                        JOptionPane.WARNING_MESSAGE);
+                return false;
+            }
+        }
+        if (map.get("password1").length()<8) {
+            JOptionPane.showMessageDialog(new JFrame(),
+                    "Your password should be at least 8 characters long",
+                    "Inane warning",
+                    JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
+        if (!map.get("password1").equals(map.get("password2"))) {
+            JOptionPane.showMessageDialog(new JFrame(),
+                    "Passwords are not matching",
+                    "Inane warning",
+                    JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
+        if (userController.checkIfUserExists(map.get("id"))) {
+            JOptionPane.showMessageDialog(new JFrame(),
+                    "Student with this id already exists",
+                    "Inane warning",
+                    JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
+        return true;
+    }
+
     public static User validateUserFilters(HashMap<String, String> map) {
         String id = map.get("id");
         String name = map.get("name");
@@ -117,7 +170,7 @@ public class Utility {
         return user;
     }
 
-    public static Filters validateFilters(HashMap<String, String> map, Date startDate, Date endDate) {
+    public static Filters validateEventFilters(HashMap<String, String> map, Date startDate, Date endDate) {
 
         Filters filters = new Filters();
 
@@ -350,19 +403,47 @@ public class Utility {
 
     public static void changeToUsersView(Role role) {
         JPanel jPanel = null;
-            switch (role.getLevel()) {
-                case 1:
-                    jPanel = new AdminUI();
-                    break;
-                case 2:
-                    jPanel = new EventOrganiserUI();
-                    break;
-                case 3:
-                    jPanel = new StudentUI();
-                    break;
-            }
-            Frames.getJFrame(Frame.Small).changePanel(jPanel);
-            JOptionPane.showMessageDialog(new JFrame(),
-                    "Successfully logged in");
+        switch (role.getLevel()) {
+            case 1:
+                jPanel = new AdminUI();
+                break;
+            case 2:
+                jPanel = new EventOrganiserUI();
+                break;
+            case 3:
+                jPanel = new StudentUI();
+                break;
         }
+        Frames.getJFrame(Frame.Small).changePanel(jPanel);
+        JOptionPane.showMessageDialog(new JFrame(),
+                "Successfully logged in");
+    }
+
+    public static FocusListener getPlaceholder(String placeholder) {
+        return new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                JTextField textField = (JTextField) e.getSource();
+                placeholderDisappear(textField, placeholder);
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                JTextField textField = (JTextField) e.getSource();
+                placeholderAppear(textField, placeholder);
+            }
+        };
+    }
+
+    public static void placeholderDisappear(JTextField textField, String placeHolder) {
+        if (textField.getText().equals(placeHolder)) {
+            textField.setText("");
+        }
+    }
+
+    public static void placeholderAppear(JTextField textField, String placeHolder) {
+        if (textField.getText().equals("")) {
+            textField.setText(placeHolder);
+        }
+    }
 }

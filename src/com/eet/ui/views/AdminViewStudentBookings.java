@@ -7,7 +7,6 @@ import com.eet.models.Event;
 import com.eet.models.Filters;
 import com.eet.ui.BigFrame;
 import com.eet.ui.RendererAndEditor;
-import com.eet.ui.DesignatedFrame;
 import com.eet.ui.Utility;
 import org.jdatepicker.impl.JDatePickerImpl;
 
@@ -102,7 +101,7 @@ public class AdminViewStudentBookings extends JPanel {
                     map.put("keywords", keywords);
                     map.put("type", type);
 
-                    Filters filters = Utility.validateFilters(map, startDate, endDate);
+                    Filters filters = Utility.validateEventFilters(map, startDate, endDate);
                     if (filters==null) {
                         System.out.println("wrong filters");
                     } else {

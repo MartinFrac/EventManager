@@ -10,6 +10,8 @@ import java.awt.event.*;
 import java.util.Arrays;
 import javax.swing.*;
 
+import static com.eet.ui.Utility.*;
+
 
 public class LoginUI extends JPanel {
 
@@ -110,29 +112,13 @@ public class LoginUI extends JPanel {
 				.withActionListener(registerActionListener)
 				.build();
 
-		FocusListener studentIdFocusListener = new FocusListener() {
-				@Override
-				public void focusGained(FocusEvent e) {
-					if (studentId.getText().equals(STUDENT_ID)) {
-						studentId.setText("");
-					}
-				}
-
-				@Override
-				public void focusLost(FocusEvent e) {
-					if (studentId.getText().equals("")) {
-						studentId.setText(STUDENT_ID);
-					}
-				}
-			};
-
 		studentId = new TextFieldBuilder(STUDENT_ID)
 				.withBounds(100,100, 200, 35)
 				.withBackground(new Color(255,255,255))
 				.withForeground(new Color(0,0,0))
 				.withFont(new Font("sansserif",0,12))
 				.build();
-		studentId.addFocusListener(studentIdFocusListener);
+		studentId.addFocusListener(getPlaceholder(STUDENT_ID));
 
 		//adding components to contentPane panel
 		this.add(loginButton);

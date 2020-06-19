@@ -93,7 +93,7 @@ public class ViewBookingsUI extends JPanel {
 					map.put("keywords", keywords);
 					map.put("type", type);
 
-					Filters filters = Utility.validateFilters(map, startDate, endDate);
+					Filters filters = Utility.validateEventFilters(map, startDate, endDate);
 					if (filters==null) {
 						System.out.println("wrong filters");
 					} else {
