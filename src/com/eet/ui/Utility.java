@@ -415,8 +415,6 @@ public class Utility {
                 break;
         }
         Frames.getJFrame(Frame.Small).changePanel(jPanel);
-        JOptionPane.showMessageDialog(new JFrame(),
-                "Successfully logged in");
     }
 
     public static FocusListener getPlaceholder(String placeholder) {
