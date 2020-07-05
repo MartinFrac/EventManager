@@ -13,7 +13,7 @@ public abstract class AbstractBuilder<SELF, T> implements Builder<SELF, T> {
     protected Color foreground;
     protected boolean isEnabled = true;
     protected boolean isVisible = true;
-    protected Font font;
+    protected Font font = new Font("sansserif", 0, 12);
 
     public AbstractBuilder(String text) {
         this.text = text;
