@@ -35,7 +35,7 @@ public class ViewBookingsUI extends JPanel {
 	private EventController eventController;
 	private EventOrganisingController eventOrganisingController;
 
-	private static final String[] columnNames = {"Title",
+	private static final String[] COLUMN_NAMES = {"Title",
 			"Type",
 			"Description",
 			"Start Date",
@@ -60,22 +60,20 @@ public class ViewBookingsUI extends JPanel {
 		this.setPreferredSize(new Dimension(900,600));
 		this.setBackground(new Color(192,192,192));
 
-		goBackButton = new ButtonBuilder("Go back")
-				.withBounds(720, 460, 140, 85)
-				.withBackground(new Color(214,217,223))
-				.withForeground(Color.BLACK)
-				.withFont(new Font("sansserif",0,18))
-				.withActionListener(e -> {
-					Utility.changeToUsersView(ActiveUser.getUser().getRole());
-					Frames.getJFrame(Frame.Big).dispose();
-				}).build();
-
 		searchBookingLabel = new LabelBuilder("Search Booking")
 				.withBounds(5, 5, 90, 35)
 				.withBackground(new Color(214,217,223))
 				.withForeground(Color.BLACK)
 				.withFont(new Font("sansserif",0,12))
 				.build();
+
+		titleTextField = new TextFieldBuilder(Filters.TITLE)
+				.withBounds(50, 40, 180, 35)
+				.withBackground(Color.WHITE)
+				.withForeground(Color.BLACK)
+				.withFont(new Font("sansserif", 0, 12))
+				.build();
+		titleTextField.addFocusListener(Utility.getPlaceholder(Filters.TITLE));
 
 		searchButton = new ButtonBuilder("Search")
 				.withBounds(250, 40, 90, 35)
@@ -94,7 +92,7 @@ public class ViewBookingsUI extends JPanel {
 					} else {
 						data = eventController.getRepeatableBookings(userId, name);
 					}
-					Utility.updateData(data, columnNames.length, 1,model);
+					Utility.updateData(data, COLUMN_NAMES.length, 1,model);
 				}).build();
 
 		repeatableButton = new ButtonBuilder("Repeatable Events")
@@ -126,16 +124,8 @@ public class ViewBookingsUI extends JPanel {
 							table.getColumnModel().getColumn(i).setMaxWidth(widths[i]);
 						}
 					}
-					Utility.updateData(data, columnNames.length, 1, model);
+					Utility.updateData(data, COLUMN_NAMES.length, 1, model);
 				}).build();
-
-		titleTextField = new TextFieldBuilder(Filters.TITLE)
-				.withBounds(50, 40, 180, 35)
-				.withBackground(Color.WHITE)
-				.withForeground(Color.BLACK)
-				.withFont(new Font("sansserif", 0, 12))
-				.build();
-		titleTextField.addFocusListener(Utility.getPlaceholder(Filters.TITLE));
 
 		keywordsTextField = new TextFieldBuilder(Filters.KEYWORDS)
 				.withBounds(355, 460, 150, 35)
@@ -200,11 +190,21 @@ public class ViewBookingsUI extends JPanel {
 							} else {
 								data = eventController.getRepeatableBookingsWithFilters(ActiveUser.getUser().getId(), filters);
 							}
-							Utility.updateData(data, columnNames.length, 1, model);
+							Utility.updateData(data, COLUMN_NAMES.length, 1, model);
 						}
 					} catch (ClassCastException exception) {
 						System.out.println(exception.getMessage());
 					}
+				}).build();
+
+		goBackButton = new ButtonBuilder("Go back")
+				.withBounds(720, 460, 140, 85)
+				.withBackground(new Color(214,217,223))
+				.withForeground(Color.BLACK)
+				.withFont(new Font("sansserif",0,18))
+				.withActionListener(e -> {
+					Utility.changeToUsersView(ActiveUser.getUser().getRole());
+					Frames.getJFrame(Frame.Big).dispose();
 				}).build();
 
 		Object[][] data = eventController.getNonRepeatableBookings(ActiveUser.getUser().getId());
@@ -212,8 +212,8 @@ public class ViewBookingsUI extends JPanel {
 		table = new JTable();
 		table.setRowHeight(40);
 		model = new DefaultTableModel();
-		model.setColumnIdentifiers(columnNames);
-		Utility.updateData(data, columnNames.length, 1, model);
+		model.setColumnIdentifiers(COLUMN_NAMES);
+		Utility.updateData(data, COLUMN_NAMES.length, 1, model);
 		table.setModel(model);
 		int[] widths = {150, 60, 190, 120, 60, 70, 150, 100, 0};
 		for (int i = 0; i<widths.length; i++) {
@@ -224,7 +224,7 @@ public class ViewBookingsUI extends JPanel {
 		RendererAndEditor rendererAndEditor = new RendererAndEditor("Cancel");
 		ActionListener actionListener = e -> {
 			DefaultTableModel tableModel = (DefaultTableModel) table.getModel();
-			int eventId = (int) tableModel.getValueAt(rendererAndEditor.getRow(), columnNames.length-1);
+			int eventId = (int) tableModel.getValueAt(rendererAndEditor.getRow(), COLUMN_NAMES.length-1);
 			tableModel.removeRow(rendererAndEditor.getRow());
 			eventController.deleteBooking(eventId, ActiveUser.getUser().getId());
 		};
